@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace MyRPG.Player
@@ -8,6 +9,7 @@ namespace MyRPG.Player
         {
             Idle,
             Move,
+            Run,
             Attack,
             Attackidle,
             Dead
@@ -23,7 +25,9 @@ namespace MyRPG.Player
 
         //이동
         public float rotAnglePerSecoud = 360f;  //1초에 플레이어의 방향을 360도 회전한다
-        public float moveSpeed = 2f;            //초당 이동 속도
+        public float moveSpeed;            //초당 이동 속도
+        private float walkSpeed = 3f;            //초당 이동 속도
+        public bool isRun;
 
         //공격
         private float attackDelay = 2f;         //공격을 한번하고 다음 공격할 때까지의 지연시간
@@ -41,6 +45,7 @@ namespace MyRPG.Player
         }
         private void Update()
         {
+            isRun = Input.GetKey(KeyCode.LeftShift);
             UpdateState();
         }
         //캐릭터의 상태가 바뀌면 어떤 일이 일어난지를 미리 정의
@@ -53,6 +58,9 @@ namespace MyRPG.Player
                     break;
                 case State.Move:
                     MoveState();
+                    break;
+                case State.Run:
+                    RunState();
                     break;
                 case State.Attack:
                     AttackState();
@@ -74,7 +82,26 @@ namespace MyRPG.Player
         void MoveState()
         {
             TurnToDesination();
-            MoveToDesination();
+            if (isRun)
+            {
+                ChangeState(State.Run, PlayerAni.Ani_Run);
+            }
+            else
+            {
+                MoveToDesination(false);
+            }
+        }
+        void RunState()
+        {
+            TurnToDesination();
+            if (isRun)
+            {
+                MoveToDesination(isRun);
+            }
+            else
+            {
+                ChangeState(State.Move, PlayerAni.Ani_move);
+            }
         }
         void AttackState()
         {
@@ -110,14 +137,21 @@ namespace MyRPG.Player
         void ChangeState(State newState ,int Number)
         {
             if(currentState == newState) return;
-            ani.ChangeAni(Number);
             currentState = newState;
+            ani.ChangeAni(Number);
         }
         public void MoveTo(Vector3 point)
         {
             currentEnemy = null;
             currentTargetPos = point;
-            ChangeState(State.Move,PlayerAni.Ani_move);
+            if (isRun)
+            {
+                ChangeState(State.Move, PlayerAni.Ani_Run);
+            }
+            else
+            {
+                ChangeState(State.Move, PlayerAni.Ani_move);
+            }
         }
         void TurnToDesination()
         {
@@ -125,9 +159,11 @@ namespace MyRPG.Player
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecoud);
         }
-        void MoveToDesination()
+        void MoveToDesination(bool isRunning)
         {
             //Vector3.MoveTowards(시작지점,목표지점,최대이동거리)
+            moveSpeed = isRunning ? walkSpeed * 2f : walkSpeed;
+
             transform.position = Vector3.MoveTowards(transform.position,currentTargetPos,moveSpeed * Time.deltaTime);
             if(currentEnemy == null)
             {

@@ -4,7 +4,9 @@ namespace MyRPG.Player
 {
     public class InputManager : MonoBehaviour
     {
+        #region Varibles
         private GameObject player;
+        #endregion
         private void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player");
@@ -32,8 +34,10 @@ namespace MyRPG.Player
                     if (hit.collider.gameObject.name == "Terrain")
                     {
                         //player.transform.position = hit.point;
+                        bool isRunning = Input.GetKey(KeyCode.LeftShift);
 
                         player.GetComponent<PlayerFSM>().MoveTo(hit.point);
+
                     }
                     else if(hit.collider.gameObject.tag == "Enemy")
                     {
@@ -42,5 +46,6 @@ namespace MyRPG.Player
                 }
             }
         }
+        
     }
 }

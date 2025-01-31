@@ -12,6 +12,7 @@ namespace MyRPG.Player
         public const int Ani_attack = 2;
         public const int Ani_attackidle = 3;
         public const int Ani_die = 4;
+        public const int Ani_Run = 5;
 
         private Animator animator;
         private void Start()
