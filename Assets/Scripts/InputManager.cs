@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyRPG
+namespace MyRPG.Player
 {
     public class InputManager : MonoBehaviour
     {
@@ -36,6 +34,10 @@ namespace MyRPG
                         //player.transform.position = hit.point;
 
                         player.GetComponent<PlayerFSM>().MoveTo(hit.point);
+                    }
+                    else if(hit.collider.gameObject.tag == "Enemy")
+                    {
+                        player.GetComponent<PlayerFSM>().AttackEnemy(hit.collider.gameObject);
                     }
                 }
             }

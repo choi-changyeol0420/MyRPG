@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyRPG
+namespace MyRPG.Player
 {
     /// <summary>
     /// 애니메이터 컨트롤러의 전이 관계에서 설정한 번호에 맞춥니다
