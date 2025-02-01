@@ -2823,19 +2823,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137,
-          w: 1}
+        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137, w: 1}
         inSlope: {x: 0, y: 0, z: 0, w: 0}
-        outSlope: {x: 0.00000016661161, y: 0.00000006685408, z: 0.000000014624413,
-          w: 0}
+        outSlope: {x: 0.00000016661161, y: 0.00000006685408, z: 0.000000014624413, w: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334, w: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334, w: 0.33333334}
       - serializedVersion: 3
         time: 1
-        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137,
-          w: 1}
+        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137, w: 1}
         inSlope: {x: 0.00000016661872, y: 0.0000000668483, z: 0.000000014624857, w: 0}
         outSlope: {x: 0, y: 0, z: 0, w: 0}
         tangentMode: 0
@@ -2901,19 +2898,16 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137,
-          w: 1}
+        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137, w: 1}
         inSlope: {x: 0, y: 0, z: 0, w: 0}
-        outSlope: {x: 0.00000016661161, y: 0.00000006685408, z: 0.000000014624413,
-          w: 0}
+        outSlope: {x: 0.00000016661161, y: 0.00000006685408, z: 0.000000014624413, w: 0}
         tangentMode: 0
         weightedMode: 0
         inWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334, w: 0.33333334}
         outWeight: {x: 0.33333334, y: 0.33333334, z: 0.33333334, w: 0.33333334}
       - serializedVersion: 3
         time: 1
-        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137,
-          w: 1}
+        value: {x: -0.000000018568228, y: -0.000000007450566, z: -0.0000000016298137, w: 1}
         inSlope: {x: 0.00000016661872, y: 0.0000000668483, z: 0.000000014624857, w: 0}
         outSlope: {x: 0, y: 0, z: 0, w: 0}
         tangentMode: 0
@@ -49448,4 +49442,11 @@ AnimationClip:
     flags: 0
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.2
+    functionName: SendAttackEnemy
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
