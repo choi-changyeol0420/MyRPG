@@ -28,6 +28,7 @@ namespace MyRPG.Player
             money = 0;
 
             isDie = false;
+            UIManager.instance.UpdatePlayerUI(this);
         }
         protected override void UpdateAfterReceiveAttack()
         {

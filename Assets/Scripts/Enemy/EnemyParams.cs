@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace MyRPG.Enemy
 {
@@ -9,7 +8,6 @@ namespace MyRPG.Enemy
         public string enemyName;
         public int exp {  get; set; }
         public int rewardMoney { get; set; }
-        public Image hpBar;
         #endregion
         public override void InitParams()
         {
@@ -28,11 +26,6 @@ namespace MyRPG.Enemy
         protected override void UpdateAfterReceiveAttack()
         {
             base.UpdateAfterReceiveAttack();
-        }
-        private void Update()
-        {
-            float speed = 2f;
-            hpBar.fillAmount = Mathf.Lerp(hpBar.fillAmount, curHP / maxHP, Time.deltaTime * speed);
         }
     }
 }

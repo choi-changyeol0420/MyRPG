@@ -12,8 +12,8 @@ namespace MyRPG
         //퍼블릭 변수와 똑같이 사용할 수 있지만 유니티 인스펙터에 노출되는 것을 막고 보안을 위해 정식 프로퍼티로 전환이 쉬워짐
         #region Variables
         public int level {  get;  set; }
-        public int maxHP {  get;  set; }
-        public int curHP {  get;  set; }
+        public float maxHP {  get;  set; }
+        public float curHP {  get;  set; }
         public int attackMin {  get;  set; }
         public int attackMax {  get;  set; }
         public int defense {  get;  set; }
@@ -32,7 +32,7 @@ namespace MyRPG
             int randAttack = Random.Range(attackMin, attackMax+1);
             return randAttack; 
         }
-        public void SetEnemyAttack(int enemyAttackPower)
+        public void SetEnemyAttack(float enemyAttackPower)
         {
             curHP -= enemyAttackPower;
             UpdateAfterReceiveAttack();
@@ -40,7 +40,7 @@ namespace MyRPG
         //캐릭터가 적으로 부터 공격을 받은 뒤에 자동으로 실행될 함수를 가상함수로 만듬
         protected virtual void UpdateAfterReceiveAttack()
         {
-            print(name + "'s HP: " + curHP);
+            //print(name + "'s HP: " + curHP);
             if(curHP <= 0)
             {
                 curHP = 0;

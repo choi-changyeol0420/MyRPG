@@ -1,5 +1,6 @@
 using MyRPG.Enemy;
 using System.Collections;
+using Unity.Android.Types;
 using UnityEngine;
 
 namespace MyRPG.Player
@@ -67,10 +68,20 @@ namespace MyRPG.Player
         public void AttackCalculate()
         {
             if (currentEnemy == null) return;
-            currentEnemy.GetComponent<EnemyFSM>().ShowHitEffect();
-
-            int attackPower = playerParams.GetRandomAttack();
-            enemyParams.SetEnemyAttack(attackPower);
+            EnemyFSM enemy = currentEnemy.GetComponent<EnemyFSM>();
+            enemy.ShowHitEffect();
+            StartCoroutine(HpColorChange(enemy));
+        }
+        IEnumerator HpColorChange(EnemyFSM enemy)
+        {
+            if(enemy)
+            {
+                enemy.hpBar.color = Color.red;
+                int attackPower = playerParams.GetRandomAttack();
+                enemyParams.SetEnemyAttack(attackPower);
+                yield return new WaitForSeconds(0.7f);
+                enemy.hpBar.color = Color.white;
+            }
         }
         //캐릭터의 상태가 바뀌면 어떤 일이 일어난지를 미리 정의
         void UpdateState()
@@ -216,6 +227,7 @@ namespace MyRPG.Player
         private void Update()
         {
             isRun = Input.GetKey(KeyCode.LeftShift);
+            UIManager.instance.UpdatePlayerUI(playerParams);
             UpdateState();
         }
     }

@@ -1,5 +1,6 @@
 using MyRPG.Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MyRPG.Enemy
 {
@@ -15,6 +16,7 @@ namespace MyRPG.Enemy
     {
         #region Variables
         public State currentState = State.Idle;
+        public Image hpBar;
 
         private EnemyParams enemyParams;
         private EnemyAni myAni;
@@ -36,7 +38,7 @@ namespace MyRPG.Enemy
         public Transform ballTransform;
         #endregion
 
-        private void Start()
+        private void Awake()
         {
             myAni = GetComponent<EnemyAni>();
             enemyParams = GetComponent<EnemyParams>();
@@ -132,9 +134,11 @@ namespace MyRPG.Enemy
         void DieState()
         {
             GetComponent<BoxCollider>().enabled = false;
+            Destroy(gameObject,3f);
         }
         void NoState()
         {
+
 
         }
 
@@ -157,6 +161,8 @@ namespace MyRPG.Enemy
         private void Update()
         {
             UpdateState();
+            float fill = enemyParams.curHP / enemyParams.maxHP;
+            hpBar.fillAmount = Mathf.Lerp(hpBar.fillAmount, fill, Time.deltaTime * 5f);
         }
     }
 }
