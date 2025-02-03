@@ -41,6 +41,7 @@ namespace MyRPG.Player
         private PlayerAni ani;
 
         private PlayerParams playerParams;
+        public Transform effectPos;
 
         private EnemyParams enemyParams;
         #endregion
@@ -78,7 +79,7 @@ namespace MyRPG.Player
             {
                 enemy.hpBar.color = Color.red;
                 int attackPower = playerParams.GetRandomAttack();
-                enemyParams.SetEnemyAttack(attackPower);
+                enemyParams.TakeDamage(attackPower);
                 yield return new WaitForSeconds(0.7f);
                 enemy.hpBar.color = Color.white;
             }

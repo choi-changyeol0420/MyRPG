@@ -32,9 +32,9 @@ namespace MyRPG
             int randAttack = Random.Range(attackMin, attackMax+1);
             return randAttack; 
         }
-        public void SetEnemyAttack(float enemyAttackPower)
+        public void TakeDamage(float Damage)
         {
-            curHP -= enemyAttackPower;
+            curHP -= Damage;
             UpdateAfterReceiveAttack();
         }
         //캐릭터가 적으로 부터 공격을 받은 뒤에 자동으로 실행될 함수를 가상함수로 만듬

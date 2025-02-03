@@ -16,7 +16,6 @@ namespace MyRPG.Enemy
     {
         #region Variables
         public State currentState = State.Idle;
-        public Image hpBar;
 
         private EnemyParams enemyParams;
         private EnemyAni myAni;
@@ -35,7 +34,7 @@ namespace MyRPG.Enemy
         float attackTimer = 0f;
 
         public GameObject effect;
-        public Transform ballTransform;
+        public Image hpBar;
         #endregion
 
         private void Awake()
@@ -74,7 +73,7 @@ namespace MyRPG.Enemy
             if(player)
             {
                 int attackPower = enemyParams.GetRandomAttack();
-                playerParams.SetEnemyAttack(attackPower);
+                playerParams.TakeDamage(attackPower);
             } 
         }
         public void ChangeState(State newState, int EnemyAni)
@@ -90,12 +89,13 @@ namespace MyRPG.Enemy
         }
         public void ShowHitEffect()
         {
-            GameObject hiteffect = Instantiate(effect, ballTransform.position, Quaternion.identity);
+            PlayerFSM playerFSM = player.GetComponent<PlayerFSM>();
+            GameObject hiteffect = Instantiate(effect, playerFSM.effectPos.position, Quaternion.identity);
             Destroy(hiteffect,2f);
         }
         void IdleState()
         {
-            if(GetDistanceFromPlayer()<chaseDistance)
+            if(GetDistanceFromPlayer() < chaseDistance)
             {
                 ChangeState(State.Chase, EnemyAni.WALK);
             }
@@ -114,6 +114,10 @@ namespace MyRPG.Enemy
         }
         void AttackState()
         {
+            if(GetDistanceFromPlayer() > chaseDistance)
+            {
+                ChangeState(State.Idle, EnemyAni.IDLE);
+            }
             if(GetDistanceFromPlayer() > reChaseDistance)
             {
                 attackTimer = 0;

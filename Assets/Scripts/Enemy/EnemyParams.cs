@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MyRPG.Enemy
 {
@@ -8,6 +9,8 @@ namespace MyRPG.Enemy
         public string enemyName;
         public int exp {  get; set; }
         public int rewardMoney { get; set; }
+
+
         #endregion
         public override void InitParams()
         {
