@@ -17,7 +17,7 @@ namespace MyRPG.Enemy
         #region Variables
         public State currentState = State.Idle;
 
-        private EnemyParams enemyParams;
+        [HideInInspector]public EnemyParams enemyParams;
         private EnemyAni myAni;
 
         private Transform player;
@@ -34,7 +34,9 @@ namespace MyRPG.Enemy
         float attackTimer = 0f;
 
         public GameObject effect;
-        public Image hpBar;
+
+        public GameObject projectilePrefab;
+        public Transform firePoint;
         #endregion
 
         private void Awake()
@@ -42,7 +44,6 @@ namespace MyRPG.Enemy
             myAni = GetComponent<EnemyAni>();
             enemyParams = GetComponent<EnemyParams>();
             enemyParams.InitParams();
-            enemyParams.dieEvent.AddListener(CallDieEvent);
             ChangeState(State.Idle, EnemyAni.IDLE);
             player = GameObject.FindGameObjectWithTag("Player").transform;
             playerParams = player.GetComponent<PlayerParams>();
@@ -73,7 +74,13 @@ namespace MyRPG.Enemy
             if(player)
             {
                 int attackPower = enemyParams.GetRandomAttack();
-                playerParams.TakeDamage(attackPower);
+                GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+                projectile.GetComponent<EnemyProjectile>().damage = attackPower;
+                if (playerParams.healCoroutine != null)
+                {
+                    StopCoroutine(playerParams.healCoroutine);
+                    playerParams.healCoroutine = null;
+                }
             } 
         }
         public void ChangeState(State newState, int EnemyAni)
@@ -81,11 +88,6 @@ namespace MyRPG.Enemy
             if(currentState == newState) return;
             currentState = newState;
             myAni.ChangeState(EnemyAni);
-        }
-        void CallDieEvent()
-        {
-            ChangeState(State.Die,EnemyAni.DIE);
-            player.gameObject.SendMessage("CurrentEnemyDie");
         }
         public void ShowHitEffect()
         {
@@ -102,6 +104,10 @@ namespace MyRPG.Enemy
         }
         void ChaseState()
         {
+            if (GetDistanceFromPlayer() > chaseDistance)
+            {
+                ChangeState(State.Idle, EnemyAni.IDLE);
+            }
             if (GetDistanceFromPlayer() < attackDistance)
             {
                 ChangeState(State.Attack, EnemyAni.ATTACK);
@@ -114,10 +120,6 @@ namespace MyRPG.Enemy
         }
         void AttackState()
         {
-            if(GetDistanceFromPlayer() > chaseDistance)
-            {
-                ChangeState(State.Idle, EnemyAni.IDLE);
-            }
             if(GetDistanceFromPlayer() > reChaseDistance)
             {
                 attackTimer = 0;
@@ -125,20 +127,19 @@ namespace MyRPG.Enemy
             }
             else
             {
-                if (attackTimer > attackDelay)
+                if (Time.time >= attackTimer)
                 {
                     transform.LookAt(player.position);
                     myAni.ChangeState(EnemyAni.ATTACK);
 
-                    attackTimer = 0;
+                    attackTimer = Time.time + attackDelay;
                 }
-                attackTimer = Time.deltaTime;
             }
         }
         void DieState()
         {
             GetComponent<BoxCollider>().enabled = false;
-            Destroy(gameObject,3f);
+            Destroy(gameObject,5f);
         }
         void NoState()
         {
@@ -166,7 +167,7 @@ namespace MyRPG.Enemy
         {
             UpdateState();
             float fill = enemyParams.curHP / enemyParams.maxHP;
-            hpBar.fillAmount = Mathf.Lerp(hpBar.fillAmount, fill, Time.deltaTime * 5f);
+            enemyParams.healthBar.fillAmount = Mathf.Lerp(enemyParams.healthBar.fillAmount, fill, Time.deltaTime * 5f);
         }
     }
 }

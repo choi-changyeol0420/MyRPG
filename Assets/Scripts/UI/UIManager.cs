@@ -22,15 +22,14 @@ namespace MyRPG
         public TextMeshProUGUI nameText;
         public TextMeshProUGUI moneyText;
         public TextMeshProUGUI healthText;
-        public Image playerhealthfill;
         #endregion
 
         public void UpdatePlayerUI(PlayerParams player)
         {
             nameText.text = player.playerName;
-            moneyText.text = player.money.ToString();
-            healthText.text = player.curHP.ToString() + "/" + player.maxHP.ToString();
-            playerhealthfill.fillAmount = Mathf.Lerp(playerhealthfill.fillAmount, player.curHP / player.maxHP,Time.deltaTime*5f);
+            moneyText.text = "Money" + player.money.ToString();
+            healthText.text = player.curHP.ToString("F0") + "/" + player.maxHP.ToString();
+            player.healthBar.fillAmount = Mathf.Lerp(player.healthBar.fillAmount, player.curHP / player.maxHP,Time.deltaTime*5f);
         }
     }
 }
