@@ -48,7 +48,7 @@ namespace MyRPG.Enemy
                 activeEnemies.Add(newEnemys);
 
                 EnemyParams enemyParams = newEnemys.GetComponent<EnemyParams>();
-                enemyParams.dieEvent.AddListener(RemoveEnemy);
+                enemyParams.dieEvent += RemoveEnemy;
             }
         }
         private void RemoveEnemy(GameObject enemy)

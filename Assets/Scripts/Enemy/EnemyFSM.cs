@@ -44,6 +44,7 @@ namespace MyRPG.Enemy
             myAni = GetComponent<EnemyAni>();
             enemyParams = GetComponent<EnemyParams>();
             enemyParams.InitParams();
+            enemyParams.dieEvent += CallDieEvent;
             ChangeState(State.Idle, EnemyAni.IDLE);
             player = GameObject.FindGameObjectWithTag("Player").transform;
             playerParams = player.GetComponent<PlayerParams>();
@@ -82,6 +83,11 @@ namespace MyRPG.Enemy
                     playerParams.healCoroutine = null;
                 }
             } 
+        }
+        void CallDieEvent(GameObject Enemy)
+        {
+            ChangeState(State.Die, EnemyAni.DIE);
+            player.gameObject.SendMessage("CurrentEnemyDie");
         }
         public void ChangeState(State newState, int EnemyAni)
         {

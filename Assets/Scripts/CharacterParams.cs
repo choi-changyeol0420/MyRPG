@@ -21,7 +21,7 @@ namespace MyRPG
         public  bool isDie { get; set; }
 
         [System.NonSerialized]
-        public UnityEvent<GameObject> dieEvent = new UnityEvent<GameObject>();
+        public UnityAction<GameObject> dieEvent;
         public Image healthBar;
         #endregion
         //나중에 CharacterParams 클래스를 상속한 자식클래스에서 InitParams 함수에 자신만의 명령어를 추가하기만 하면 자동으로 필요한 명령어들이 실행

@@ -58,7 +58,7 @@ namespace MyRPG.Player
             playerParams = GetComponent<PlayerParams>();
             playerParams.InitParams();
             currentStamina = stamina; // 스태미나 초기화
-            playerParams.dieEvent.AddListener(ChangeToPlayerDie);
+            playerParams.dieEvent += ChangeToPlayerDie;
         }
         public void ChangeToPlayerDie(GameObject player)
         {
