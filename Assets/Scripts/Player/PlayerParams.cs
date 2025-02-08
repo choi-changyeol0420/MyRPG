@@ -41,13 +41,13 @@ namespace MyRPG.Player
         }
         public void StartHealing(float healRate = 5f)
         {
-            if (curHP < maxHP)
+            if (this.curHP < this.maxHP)
             {
                 // 마지막으로 피해를 입은 후 일정 시간이 지나면 회복 시작
                 if (Time.time - lastDamageTime >= healDelay)
                 {
-                    curHP += healRate * Time.deltaTime;
-                    curHP = Mathf.Clamp(curHP, 0, maxHP); // 체력 초과 방지
+                    this.curHP += healRate * Time.deltaTime;
+                    this.curHP = Mathf.Clamp(this.curHP, 0, maxHP); // 체력 초과 방지
                 }
             }
         }
