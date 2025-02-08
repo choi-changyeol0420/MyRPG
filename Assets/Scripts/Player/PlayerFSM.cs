@@ -29,8 +29,6 @@ namespace MyRPG.Player
         public float rotAnglePerSecoud = 360f;  //1초에 플레이어의 방향을 360도 회전한다
         public float moveSpeed;            //초당 이동 속도
         private float walkSpeed = 3f;            //초당 이동 속도
-        private float elapsedRunTime = 0f; // 현재까지 뛴 시간
-        private float maxRunTime = 5f; // 최대 달릴 수 있는 시간 (예: 5초)
         private bool isRun;
         public float stamina = 5f;     // 최대 스태미나 (초 단위)
         public float staminaRecoveryRate = 1f; // 초당 스태미나 회복량
@@ -118,10 +116,6 @@ namespace MyRPG.Player
         }
         void IdleState()
         {
-            if (playerParams.curHP < playerParams.maxHP)
-            {
-                playerParams.StartHealing(5 * 1.5f); // 체력이 부족하면 회복 시작
-            }
             currentStamina += 1.5f * Time.deltaTime; // 초당 스태미나 회복
             if (currentStamina > stamina)
             {
@@ -131,12 +125,8 @@ namespace MyRPG.Player
         void MoveState()
         {
             TurnToDesination();
-            if (playerParams.curHP < playerParams.maxHP)
-            {
-                playerParams.StartHealing(); // 체력이 부족하면 회복 시작
-            }
             // 뛰는 시간이 초과되었거나 스태미나가 1 이하이면 걷기로 변경
-            if ((isRun && currentStamina > 0) && elapsedRunTime < maxRunTime)
+            if (isRun)
             {
                 ChangeState(State.Run, PlayerAni.Ani_Run);
             }
@@ -153,52 +143,31 @@ namespace MyRPG.Player
                     currentStamina = stamina;
                 }
 
-                // 뛰는 시간 초기화
-                elapsedRunTime = 0f;
             }
         }
         void RunState()
         {
             TurnToDesination();
-            if (playerParams.curHP < playerParams.maxHP)
-            {
-                playerParams.StartHealing(); // 체력이 부족하면 회복 시작
-            }
             if (isRun)
             {
-                // 뛰는 시간이 maxRunTime을 초과하면 걷기로 변경
-                if (elapsedRunTime >= maxRunTime)
-                {
-                    ChangeState(State.Move, PlayerAni.Ani_move);
-                    elapsedRunTime = 0f; // 뛰는 시간 초기화
-                    return;
-                }
-
                 if (currentStamina > 0)
                 {
                     currentStamina -= Time.deltaTime; // 초당 스태미나 감소
-                    elapsedRunTime += Time.deltaTime; // 뛰는 시간 증가
                     MoveToDesination(isRun);
                 }
                 else
                 {
                     currentStamina = 0;
                     ChangeState(State.Move, PlayerAni.Ani_move);
-                    elapsedRunTime = 0f; // 뛰는 시간 초기화
                 }
             }
             else
             {
                 ChangeState(State.Move, PlayerAni.Ani_move);
-                elapsedRunTime = 0f; // 뛰는 시간 초기화
             }
         }
         void AttackState()
         {
-            if (playerParams.curHP < playerParams.maxHP)
-            {
-                playerParams.StartHealing(1.5f); // 체력이 부족하면 회복 시작
-            }
             attackTimer = 0f;
             //tranform.LooAt(폭표지점 위치) 목표지점을 향해 오브젝트를 회전시키는 함수
             transform.LookAt(currentTargetPos);
@@ -206,10 +175,6 @@ namespace MyRPG.Player
         }
         void AttackIdle()
         {
-            if (playerParams.curHP < playerParams.maxHP)
-            {
-                playerParams.StartHealing(1.5f); // 체력이 부족하면 회복 시작
-            }
             if (attackTimer > attackDelay)
             {
                 if(Input.GetKeyDown(KeyCode.Q))
@@ -286,10 +251,26 @@ namespace MyRPG.Player
         }
         private void Update()
         {
-            isRun = Input.GetKey(KeyCode.LeftShift);
             UIManager.instance.UpdatePlayerUI(playerParams);
             staminaImage.fillAmount = Mathf.Lerp(staminaImage.fillAmount,currentStamina/stamina,Time.deltaTime*5f);
             UpdateState();
+            if(currentState == State.Idle)
+            {
+                playerParams.StartHealing();
+            }
+            else
+            {
+                playerParams.StartHealing();
+            }
+            if(currentStamina <0.1f)
+            {
+                isRun = false;
+            }
+            else if (currentStamina > 1f)
+            {
+                isRun = Input.GetKey(KeyCode.LeftShift);
+            }
+
         }
     }
 }

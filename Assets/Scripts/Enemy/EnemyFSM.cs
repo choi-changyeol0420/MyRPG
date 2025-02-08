@@ -77,11 +77,6 @@ namespace MyRPG.Enemy
                 int attackPower = enemyParams.GetRandomAttack();
                 GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
                 projectile.GetComponent<EnemyProjectile>().damage = attackPower;
-                if (playerParams.healCoroutine != null)
-                {
-                    StopCoroutine(playerParams.healCoroutine);
-                    playerParams.healCoroutine = null;
-                }
             } 
         }
         void CallDieEvent(GameObject Enemy)

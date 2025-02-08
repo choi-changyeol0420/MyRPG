@@ -36,7 +36,11 @@ namespace MyRPG
         }
         public void TakeDamage(float Damage)
         {
-            curHP -= Damage;
+            if(isDie) return;
+            // 방어력 적용 공식: 받은 피해량 = 기본 피해량 - (방어력 * 피해 감소율)
+            float damageReduction = defense * 0.2f; // 방어력의 20%만큼 피해 감소
+            float finalDamage = Mathf.Max(Damage - damageReduction, 1); // 최소 1 이상의 피해 적용
+            curHP -= finalDamage;
             UpdateAfterReceiveAttack();
         }
         //캐릭터가 적으로 부터 공격을 받은 뒤에 자동으로 실행될 함수를 가상함수로 만듬
