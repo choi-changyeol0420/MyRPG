@@ -129,7 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 99500980}
   - component: {fileID: 99500982}
-  - component: {fileID: 99500981}
+  - component: {fileID: 99500984}
+  - component: {fileID: 99500983}
   m_Layer: 5
   m_Name: Image (1)
   m_TagString: Untagged
@@ -151,12 +152,20 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1518602371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -25, y: 20.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 125, y: 20.5}
   m_SizeDelta: {x: 250, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &99500981
+--- !u!222 &99500982
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99500979}
+  m_CullTransparentMesh: 1
+--- !u!114 &99500983
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,7 +174,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 99500979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3343389990998fa42839ede99e25be20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  img: {fileID: 99500984}
+  imageUrl: "\uD770\uC0C9.png"
+--- !u!114 &99500984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99500979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -176,24 +199,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 177d8f65bc9ffa84495771a20ba2239e, type: 3}
-  m_Type: 3
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 0
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &99500982
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 99500979}
-  m_CullTransparentMesh: 1
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 708042749}
   - component: {fileID: 708042751}
-  - component: {fileID: 708042750}
+  - component: {fileID: 708042752}
   m_Layer: 5
   m_Name: Stamina
   m_TagString: Untagged
@@ -503,7 +515,15 @@ RectTransform:
   m_AnchoredPosition: {x: -10.1, y: 1.8}
   m_SizeDelta: {x: 280, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &708042750
+--- !u!222 &708042751
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708042748}
+  m_CullTransparentMesh: 1
+--- !u!114 &708042752
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -516,7 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5235849, g: 1, b: 0.6507828, a: 1}
+  m_Color: {r: 0.5254902, g: 1, b: 0.6509804, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -533,14 +553,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!222 &708042751
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 708042748}
-  m_CullTransparentMesh: 1
 --- !u!1 &755050133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1406,7 +1418,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1587691764}
   - component: {fileID: 1587691766}
-  - component: {fileID: 1587691765}
+  - component: {fileID: 1587691768}
+  - component: {fileID: 1587691767}
   m_Layer: 5
   m_Name: Image (3)
   m_TagString: Untagged
@@ -1433,7 +1446,15 @@ RectTransform:
   m_AnchoredPosition: {x: -10.099995, y: 1.7999808}
   m_SizeDelta: {x: 280, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1587691765
+--- !u!222 &1587691766
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587691763}
+  m_CullTransparentMesh: 1
+--- !u!114 &1587691767
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1442,7 +1463,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1587691763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3343389990998fa42839ede99e25be20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  img: {fileID: 1587691768}
+  imageUrl: "\uD770\uC0C9.png"
+--- !u!114 &1587691768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587691763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -1453,24 +1488,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 177d8f65bc9ffa84495771a20ba2239e, type: 3}
-  m_Type: 3
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 0
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1587691766
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587691763}
-  m_CullTransparentMesh: 1
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!114 &1759624364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1488,7 +1512,7 @@ MonoBehaviour:
   moveSpeed: 2
   stamina: 5
   staminaRecoveryRate: 1
-  staminaImage: {fileID: 708042750}
+  staminaImage: {fileID: 708042752}
   effectPos: {fileID: 7425032207014018592}
 --- !u!114 &1759624365
 MonoBehaviour:
