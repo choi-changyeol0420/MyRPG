@@ -1,4 +1,6 @@
+using MyRPG.Manager;
 using MyRPG.Player;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,6 +85,7 @@ namespace MyRPG.Enemy
         {
             ChangeState(State.Die, EnemyAni.DIE);
             player.gameObject.SendMessage("CurrentEnemyDie");
+            playerParams.AddExperience(enemyParams.exp);
         }
         public void ChangeState(State newState, int EnemyAni)
         {

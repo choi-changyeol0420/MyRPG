@@ -1,4 +1,5 @@
 using MyRPG.Enemy;
+using MyRPG.Manager;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,6 +45,8 @@ namespace MyRPG.Player
         private PlayerAni ani;
 
         private PlayerParams playerParams;
+        private float saveTime = 30f;
+        private float timer = 0f;
         public Transform effectPos;
 
         private EnemyParams enemyParams;
@@ -177,7 +180,7 @@ namespace MyRPG.Player
         {
             if (attackTimer > attackDelay)
             {
-                if(Input.GetKeyDown(KeyCode.Q))
+                if(Input.GetKeyDown(SaveManager.Instance.GetKey("Attack")))
                 {
                     ChangeState(State.Attack, PlayerAni.Ani_attack);
                 }
@@ -251,6 +254,7 @@ namespace MyRPG.Player
         }
         private void Update()
         {
+            SaveTimer();
             UIManager.instance.UpdatePlayerUI(playerParams);
             staminaImage.fillAmount = Mathf.Lerp(staminaImage.fillAmount,currentStamina/stamina,Time.deltaTime*5f);
             UpdateState();
@@ -268,9 +272,17 @@ namespace MyRPG.Player
             }
             else if (currentStamina > 1f)
             {
-                isRun = Input.GetKey(KeyCode.LeftShift);
+                isRun = Input.GetKey(SaveManager.Instance.GetKey("Run"));
             }
-
+        }
+        private void SaveTimer()
+        {
+            timer += Time.deltaTime;
+            if (timer >= saveTime)
+            {
+                playerParams.OnPlayerStateSave();
+                timer = 0f;
+            }
         }
     }
 }

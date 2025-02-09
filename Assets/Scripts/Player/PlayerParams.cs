@@ -1,7 +1,6 @@
-using System.Collections;
+using MyRPG.Manager;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Experimental.GlobalIllumination;
 
 namespace MyRPG.Player
 {
@@ -15,6 +14,15 @@ namespace MyRPG.Player
 
         float healDelay = 3f; // 피해를 입은 후 회복 시작까지의 대기 시간
         private float lastDamageTime; // 마지막으로 피해를 입은 시간
+
+        public const string playerCurExp = "playerCurExp";
+        public const string playerlevel = "playerlevel";
+        public const string playerMaxHp = "playerMaxHp";
+        public const string playerCurHp = "playerCurHp";
+        public const string playerAttackMax = "playerAttackMax";
+        public const string playerAttackMin = "playerAttackMin";
+        public const string playerDefense = "playerDefense";
+        public const string playerMoney = "playerMoney";
         #endregion
 
         public override void InitParams()
@@ -41,15 +49,58 @@ namespace MyRPG.Player
         }
         public void StartHealing(float healRate = 5f)
         {
-            if (this.curHP < this.maxHP)
+            if (curHP < maxHP)
             {
                 // 마지막으로 피해를 입은 후 일정 시간이 지나면 회복 시작
                 if (Time.time - lastDamageTime >= healDelay)
                 {
-                    this.curHP += healRate * Time.deltaTime;
-                    this.curHP = Mathf.Clamp(this.curHP, 0, maxHP); // 체력 초과 방지
+                    curHP += healRate * Time.deltaTime;
+                    curHP = Mathf.Clamp(curHP, 0, maxHP); // 체력 초과 방지
                 }
             }
+        }
+        public void AddExperience(int amount)
+        {
+            curExp += amount;
+            while (curExp >= expToNextLevel)
+            {
+                curExp -= expToNextLevel;
+                LevelUp();
+            }
+            OnPlayerStateSave();
+        }
+        private void LevelUp()
+        {
+            level++;
+            expToNextLevel = 100 * level;
+
+            maxHP += 10;
+            attackMax += 5;
+            attackMin += 2;
+
+            if(level % 5 == 0)
+            {
+                defense += 2;
+            }
+        }
+        public void OnPlayerStateSave()
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>()
+            {
+                {playerCurExp ,curExp },
+                {playerlevel , level },
+                {playerMaxHp ,maxHP},
+                {playerCurHp ,curHP },
+                {playerAttackMax ,attackMax },
+                {playerAttackMin ,attackMin },
+                {playerDefense ,defense },
+                {playerMoney ,money }
+            };
+            SaveManager.Instance.SaveData(data);
+        }
+        private void OnApplicationQuit()
+        {
+            OnPlayerStateSave();
         }
     }
 }
