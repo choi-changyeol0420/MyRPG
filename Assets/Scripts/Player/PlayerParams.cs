@@ -2,6 +2,7 @@ using MyRPG.camera;
 using MyRPG.Manager;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace MyRPG.Player
@@ -9,9 +10,10 @@ namespace MyRPG.Player
     public class PlayerParams : CharacterParams
     {
         #region Variables
-        [HideInInspector]public int expToNextLevel { get; set; }
+        //player속성
+        [HideInInspector] public int expToNextLevel { get; set; }
         [HideInInspector] public string playerName = "ch";
-        [HideInInspector]public int curLevel = 1;
+        [HideInInspector] public int curLevel = 1;
         [HideInInspector] public float curMaxHP = 100f;
         [HideInInspector] public int curAttackMin = 5;
         [HideInInspector] public int curAttackMax = 10;
@@ -19,12 +21,16 @@ namespace MyRPG.Player
         [HideInInspector] public int curExp = 0;
         [HideInInspector] public int curMoney = 0;
         [HideInInspector] public Vector3 curPosition;
+
+        //체력 회복
         private float healDelay = 3f; // 피해를 입은 후 회복 시작까지의 대기 시간
         private float lastDamageTime; // 마지막으로 피해를 입은 시간
         public Image expImg;
         public TextMeshProUGUI exptext;
         private Camera mainCam;
-        private CameraControl control; 
+        private CameraControl control;
+
+        public UnityAction OnLevelUp;
         #endregion
 
         public override void InitParams()
@@ -74,21 +80,21 @@ namespace MyRPG.Player
             curExp += amount;
             while (curExp >= expToNextLevel)
             {
-                curExp -= expToNextLevel;
                 LevelUp();
             }
             SaveSystem.SaveDataPlayer(data);
         }
         private void LevelUp()
         {
+            curExp -= expToNextLevel;
             curLevel++;
-            expToNextLevel = 100 * curLevel;
+            expToNextLevel = Mathf.RoundToInt(expToNextLevel * 1.2f);
 
             curMaxHP += 10;
             data.maxHP = curMaxHP;
             curAttackMax += 5;
             curAttackMin += 2;
-
+            OnLevelUp?.Invoke();
             if (curLevel % 5 == 0)
             {
                 curDefense += 2;

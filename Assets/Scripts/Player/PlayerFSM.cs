@@ -63,11 +63,15 @@ namespace MyRPG.Player
             playerParams.InitParams();
             currentStamina = stamina; // 스태미나 초기화
             playerParams.dieEvent += ChangeToPlayerDie;
-
+            playerParams.OnLevelUp += HandlevelUp;
         }
         public void ChangeToPlayerDie(GameObject player)
         {
             ChangeState(State.Dead, PlayerAni.Ani_die);
+        }
+        public void HandlevelUp()
+        {
+            Debug.Log("레벨업 연출");
         }
         public void CurrentEnemyDie()
         {
