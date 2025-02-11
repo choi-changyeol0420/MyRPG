@@ -89,8 +89,8 @@ namespace MyRPG.Player
             if(damageable != null)
             {
                 enemy.enemyParams.healthBar.color = Color.red;
-                //int attackPower = playerParams.GetRandomAttack();
-                damageable.TakeDamage(1000);
+                int attackPower = playerParams.GetRandomAttack();
+                damageable.TakeDamage(attackPower);
                 yield return new WaitForSeconds(0.7f);
                 enemy.enemyParams.healthBar.color = Color.white;
             }
@@ -274,7 +274,7 @@ namespace MyRPG.Player
             }
             else
             {
-                playerParams.StartHealing();
+                playerParams.StartHealing(2);
             }
             if(currentStamina <0.01f)
             {
