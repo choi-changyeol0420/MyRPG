@@ -74,7 +74,13 @@ namespace MyRPG.Enemy
         }
         public void AttackCalculate()
         {
-            if(player)
+            if (playerParams.isDie)
+            {
+                ChangeState(State.Idle,EnemyAni.IDLE);
+                return;
+            }
+            IDamageable damageable = player.GetComponent<IDamageable>();
+            if(damageable != null)
             {
                 int attackPower = enemyParams.GetRandomAttack();
                 GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
@@ -85,7 +91,7 @@ namespace MyRPG.Enemy
         {
             ChangeState(State.Die, EnemyAni.DIE);
             player.gameObject.SendMessage("CurrentEnemyDie");
-            playerParams.AddExperience(enemyParams.exp);
+            playerParams.AddExperience(enemyParams.exp + 50);
         }
         public void ChangeState(State newState, int EnemyAni)
         {

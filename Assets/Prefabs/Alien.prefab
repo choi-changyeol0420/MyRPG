@@ -905,10 +905,10 @@ GameObject:
   - component: {fileID: 7787453778485571688}
   - component: {fileID: 5641147180117167522}
   - component: {fileID: 2071994257126810764}
-  - component: {fileID: 970127985557369810}
   - component: {fileID: 6378775976600628332}
+  - component: {fileID: 7096882582979861670}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Alien
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1033,20 +1033,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b0983d8c4244e46a4af43a7d6ede79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &970127985557369810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3693509918227750665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fef08597bc53eb4993aa557c9c15231, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBar: {fileID: 1972877789399412980}
-  enemyName: Monster
 --- !u!114 &6378775976600628332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1059,6 +1045,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 749555223674ae1428815f657e074178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7096882582979861670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3693509918227750665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fc5fe73a26924649bf2dc13f4bd3100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyName: Alien
+  healthBar: {fileID: 1972877789399412980}
 --- !u!1 &3734333025259229715
 GameObject:
   m_ObjectHideFlags: 0

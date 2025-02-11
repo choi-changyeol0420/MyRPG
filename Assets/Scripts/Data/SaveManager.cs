@@ -1,49 +1,34 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using UnityEngine;
-using UnityEngine.Rendering;
+using Newtonsoft.Json;
 
 namespace MyRPG.Manager
 {
-    [System.Serializable]
-    public class SaveDataWrapper
+    public static class SaveSystem
     {
-        public List<string> keys;
-        public List<string> values;
-        public SaveDataWrapper(Dictionary<string, object> data)
+        #region Variables
+        private static string path = Path.Combine(Application.persistentDataPath, "SaveData.json");
+        #endregion
+        public static void SaveDataPlayer(CharacterData saveData)
         {
-            keys = new List<string>();
-            values = new List<string>();
-
-            foreach (var pair in data)
-            {
-                keys.Add(pair.Key);
-                values.Add(pair.Value.ToString());
-            }
+            string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
+            File.WriteAllText(path, json);
+            Debug.Log("게임 데이터 저장 완료! " + path);
         }
-        public Dictionary<string, object> ToDictionary()
+        public static CharacterData LoadDataPlayer()
         {
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            for (int i = 0; i < keys.Count; i++)
+            if(File.Exists(path))
             {
-                int intValue;
-                float floatValue;
-                if (int.TryParse(values[i], out intValue))
-                {
-                    data[keys[i]] = intValue;
-                }
-                else if (float.TryParse(values[i], out floatValue))
-                {
-                    data[keys[i]] = floatValue;
-                }
-                else
-                {
-                    data[keys[i]] = values[i];
-                }
+                string json = File.ReadAllText(path);
+                Debug.Log("저장된 파일을 불러왔습니다");
+                return JsonConvert.DeserializeObject<CharacterData>(json);
             }
-            return data;
+            else
+            {
+                Debug.Log("저장된 파일이 업습니다");
+                return new CharacterData();
+            }
         }
     }
     [System.Serializable]
@@ -78,7 +63,6 @@ namespace MyRPG.Manager
         public static SaveManager Instance { get; private set; }
         #endregion
         #region Variables
-        private string savePath;
         private string keyPath;
         public Dictionary<string, KeyCode> keyData = new Dictionary<string, KeyCode>();
         #endregion
@@ -87,88 +71,31 @@ namespace MyRPG.Manager
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
                 Destroy(gameObject);
             }
             keyPath = Path.Combine(Application.persistentDataPath, "keyData.json");
-            savePath = Path.Combine(Application.persistentDataPath, "saveData.json");
         }
         private void Start()
         {
-            LoadData();
+            LoadKeybind();
         }
-        // ✅ 데이터 저장 (Dictionary 기반)
-        public void SaveData(Dictionary<string, object> data)
-        {
-            string json = JsonUtility.ToJson(new SaveDataWrapper(data), true);
-            byte[] compressedData = CompressString(json);
-            File.WriteAllBytes(savePath, compressedData);
-            Debug.Log("데이터 저장 완료: " + savePath);
-        }
-        public Dictionary<string, object> LoadData()
-        {
-            if (File.Exists(savePath))
-            {
-                byte[] compressedData = File.ReadAllBytes(savePath);
-                string json = DecompressString(compressedData);
-                SaveDataWrapper weapper = JsonUtility.FromJson<SaveDataWrapper>(json);
-                Debug.Log("📂 데이터 로드 완료!");
-                return weapper.ToDictionary();
-            }
-            Debug.Log("저장한 데이터가 없습니다");
-            return new Dictionary<string, object>(); //기본값 반환
-        }
-        private byte[] CompressString(string str)
-        {
-            using (MemoryStream ms = new MemoryStream())
-                using (GZipStream gZipStream = new GZipStream(ms, CompressionMode.Compress))
-                using (StreamWriter sw = new StreamWriter(gZipStream))
-            {
-                sw.Write(str);
-                sw.Close();
-                return ms.ToArray();
-            }
-        }
-        private string DecompressString(byte[] data)
-        {
-            using (MemoryStream ms = new MemoryStream(data))
-            using (GZipStream gZipStream = new GZipStream(ms, CompressionMode.Decompress))
-            using (StreamReader reader = new StreamReader(gZipStream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-        private void CleanUpOldSaves()
-        {
-            string saveDirectory = Path.GetDirectoryName(savePath);
-            string[] saveFiles = Directory.GetFiles(saveDirectory, "saveData_*.json");
-
-            if (saveFiles.Length > 5)
-            {
-                // 파일 생성 날짜 기준으로 정렬 후 가장 오래된 파일 삭제
-                Array.Sort(saveFiles, (a, b) => File.GetCreationTime(a).CompareTo(File.GetCreationTime(b)));
-                File.Delete(saveFiles[0]);
-                Debug.Log("🗑️ 오래된 저장 파일 삭제: " + saveFiles[0]);
-            }
-        }
-
         private void SetDefaultKey()
         {
             keyData["Run"] = KeyCode.LeftShift;
-            keyData["Attack"] = KeyCode.Q;
+            keyData["Attack"] = KeyCode.Mouse0;
         }
         public void SaveKeyData()
         {
             SaveKeybind data = new SaveKeybind(keyData);
             string json = JsonUtility.ToJson(data,true);
-            File.WriteAllText(savePath, json);
+            File.WriteAllText(keyPath, json);
         }
         public void LoadKeybind()
         {
-            if(!File.Exists(keyPath))
+            if(File.Exists(keyPath))
             {
                 string json = File.ReadAllText(keyPath);
                 SaveKeybind data = JsonUtility.FromJson<SaveKeybind>(json);

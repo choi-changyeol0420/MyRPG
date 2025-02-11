@@ -55,11 +55,15 @@ namespace MyRPG.Player
         {
             ani = GetComponent<PlayerAni>();
             ChangeState(State.Idle,PlayerAni.Ani_idle);
-            
             playerParams = GetComponent<PlayerParams>();
+            Init();
+        }
+        private void Init()
+        {
             playerParams.InitParams();
             currentStamina = stamina; // 스태미나 초기화
             playerParams.dieEvent += ChangeToPlayerDie;
+
         }
         public void ChangeToPlayerDie(GameObject player)
         {
@@ -81,11 +85,12 @@ namespace MyRPG.Player
         }
         IEnumerator HpColorChange(EnemyFSM enemy)
         {
-            if(enemy)
+            IDamageable damageable = enemy.GetComponent<IDamageable>();
+            if(damageable != null)
             {
                 enemy.enemyParams.healthBar.color = Color.red;
-                int attackPower = playerParams.GetRandomAttack();
-                enemyParams.TakeDamage(attackPower);
+                //int attackPower = playerParams.GetRandomAttack();
+                damageable.TakeDamage(1000);
                 yield return new WaitForSeconds(0.7f);
                 enemy.enemyParams.healthBar.color = Color.white;
             }
@@ -254,7 +259,12 @@ namespace MyRPG.Player
         }
         private void Update()
         {
+            if (playerParams.isDie) return;
             SaveTimer();
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                playerParams.LoadPlayerData();
+            }
             UIManager.instance.UpdatePlayerUI(playerParams);
             staminaImage.fillAmount = Mathf.Lerp(staminaImage.fillAmount,currentStamina/stamina,Time.deltaTime*5f);
             UpdateState();
@@ -266,7 +276,7 @@ namespace MyRPG.Player
             {
                 playerParams.StartHealing();
             }
-            if(currentStamina <0.1f)
+            if(currentStamina <0.01f)
             {
                 isRun = false;
             }
@@ -280,7 +290,8 @@ namespace MyRPG.Player
             timer += Time.deltaTime;
             if (timer >= saveTime)
             {
-                playerParams.OnPlayerStateSave();
+                playerParams.SavePlayerData();
+                Debug.Log("자동저장 완료");
                 timer = 0f;
             }
         }

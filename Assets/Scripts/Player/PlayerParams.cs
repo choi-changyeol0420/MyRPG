@@ -1,46 +1,56 @@
+using MyRPG.camera;
 using MyRPG.Manager;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MyRPG.Player
 {
     public class PlayerParams : CharacterParams
     {
         #region Variables
-        public string playerName {  get; set; }
-        public int curExp { get; set; }
-        public int expToNextLevel { get; set; }
-        public int money {  get; set; }
-
-        float healDelay = 3f; // 피해를 입은 후 회복 시작까지의 대기 시간
+        [HideInInspector]public int expToNextLevel { get; set; }
+        [HideInInspector] public string playerName = "ch";
+        [HideInInspector]public int curLevel = 1;
+        [HideInInspector] public float curMaxHP = 100f;
+        [HideInInspector] public int curAttackMin = 5;
+        [HideInInspector] public int curAttackMax = 10;
+        [HideInInspector] public int curDefense = 3;
+        [HideInInspector] public int curExp = 0;
+        [HideInInspector] public int curMoney = 0;
+        [HideInInspector] public Vector3 curPosition;
+        private float healDelay = 3f; // 피해를 입은 후 회복 시작까지의 대기 시간
         private float lastDamageTime; // 마지막으로 피해를 입은 시간
-
-        public const string playerCurExp = "playerCurExp";
-        public const string playerlevel = "playerlevel";
-        public const string playerMaxHp = "playerMaxHp";
-        public const string playerCurHp = "playerCurHp";
-        public const string playerAttackMax = "playerAttackMax";
-        public const string playerAttackMin = "playerAttackMin";
-        public const string playerDefense = "playerDefense";
-        public const string playerMoney = "playerMoney";
+        public Image expImg;
+        public TextMeshProUGUI exptext;
+        private Camera mainCam;
+        private CameraControl control; 
         #endregion
 
         public override void InitParams()
         {
-            playerName = "ch";
-            level = 1;
-            maxHP = 100;
-            curHP = maxHP;
-            attackMin = 5;
-            attackMax = 10;
-            defense = 5;
-
-            curExp = 0;
-            expToNextLevel = 100 * level;
-            money = 0;
-
-            isDie = false;
-            UIManager.instance.UpdatePlayerUI(this);
+            mainCam = Camera.main;
+            control = mainCam.GetComponent<CameraControl>();
+            data = SaveSystem.LoadDataPlayer();
+            if (data != null)
+            {
+                LoadPlayerData();
+                curHP = data.maxHP;
+                expToNextLevel = 100 * curLevel;
+                if (UIManager.instance != null)
+                {
+                    UIManager.instance.UpdatePlayerUI(this);
+                }
+                Debug.Log("저장이 잘 되어 로드합니다");
+            }
+            else
+            {
+                SavePlayerData();
+                data = SaveSystem.LoadDataPlayer();
+                curHP = data.maxHP;
+                expToNextLevel = 100 * curLevel;
+                Debug.Log("저장한 데이터가 없습니다");
+            }
         }
         protected override void UpdateAfterReceiveAttack()
         {
@@ -49,13 +59,13 @@ namespace MyRPG.Player
         }
         public void StartHealing(float healRate = 5f)
         {
-            if (curHP < maxHP)
+            if (curHP < data.maxHP)
             {
                 // 마지막으로 피해를 입은 후 일정 시간이 지나면 회복 시작
                 if (Time.time - lastDamageTime >= healDelay)
                 {
                     curHP += healRate * Time.deltaTime;
-                    curHP = Mathf.Clamp(curHP, 0, maxHP); // 체력 초과 방지
+                    curHP = Mathf.Clamp(curHP, 0, data.maxHP); // 체력 초과 방지
                 }
             }
         }
@@ -67,40 +77,67 @@ namespace MyRPG.Player
                 curExp -= expToNextLevel;
                 LevelUp();
             }
-            OnPlayerStateSave();
+            SaveSystem.SaveDataPlayer(data);
         }
         private void LevelUp()
         {
-            level++;
-            expToNextLevel = 100 * level;
+            curLevel++;
+            expToNextLevel = 100 * curLevel;
 
-            maxHP += 10;
-            attackMax += 5;
-            attackMin += 2;
+            curMaxHP += 10;
+            data.maxHP = curMaxHP;
+            curAttackMax += 5;
+            curAttackMin += 2;
 
-            if(level % 5 == 0)
+            if (curLevel % 5 == 0)
             {
-                defense += 2;
+                curDefense += 2;
             }
         }
-        public void OnPlayerStateSave()
+        public void SavePlayerData()
         {
-            Dictionary<string, object> data = new Dictionary<string, object>()
+            data = new CharacterData
             {
-                {playerCurExp ,curExp },
-                {playerlevel , level },
-                {playerMaxHp ,maxHP},
-                {playerCurHp ,curHP },
-                {playerAttackMax ,attackMax },
-                {playerAttackMin ,attackMin },
-                {playerDefense ,defense },
-                {playerMoney ,money }
+                Name = playerName,
+                level = curLevel,
+                maxHP = curMaxHP,
+                attackMax = curAttackMax,
+                attackMin = curAttackMin,
+                defense = curDefense,
+                Exp = curExp,
+                money = curMoney,
+                position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+                camOffSet = new float[] {control.GetCameraOffset().x,control.GetCameraOffset().y,control.GetCameraOffset().z}
             };
-            SaveManager.Instance.SaveData(data);
+            SaveSystem.SaveDataPlayer(data);
+        }
+        public void LoadPlayerData()
+        {
+            data = SaveSystem.LoadDataPlayer();
+            if (data != null)
+            {
+                playerName = data.Name;
+                curLevel = data.level;
+                curMaxHP = data.maxHP;
+                curAttackMax = data.attackMax;
+                curAttackMin = data.attackMin;
+                curDefense = data.defense;
+                curExp = data.Exp;
+                curMoney = data.money;
+                curPosition = new Vector3(data.position[0], data.position[1], data.position[2]);
+                transform.position = curPosition;
+                control.UpdateCameraPosition(new Vector3(data.camOffSet[0], data.camOffSet[1], data.camOffSet[2]));
+                Debug.Log($"로드 완료!");
+            }
+            else
+            {
+                Debug.Log($"실패");
+            }
+            
         }
         private void OnApplicationQuit()
         {
-            OnPlayerStateSave();
+            SaveSystem.SaveDataPlayer(data);
         }
     }
 }
