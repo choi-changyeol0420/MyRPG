@@ -37,7 +37,7 @@ namespace MyRPG.Enemy
         {
             if (other.CompareTag("Player")) // 플레이어와 충돌 시
             {
-                other.GetComponent<PlayerParams>().TakeDamage(damage); // 플레이어에게 데미지 적용
+                other.GetComponent<IDamageable>().TakeDamage(damage); // 플레이어에게 데미지 적용
 
                 if (hitEffect != null)
                 {
