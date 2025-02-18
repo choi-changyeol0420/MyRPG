@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 8098809556021694841}
   m_Layer: 0
   m_Name: CATRigRArmCollarbone
-  m_TagString: Untagged
+  m_TagString: EnemyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

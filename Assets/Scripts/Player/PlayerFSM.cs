@@ -1,3 +1,4 @@
+using MyRPG.Attack;
 using MyRPG.Enemy;
 using MyRPG.Manager;
 using System.Collections;
@@ -6,6 +7,13 @@ using UnityEngine.UI;
 
 namespace MyRPG.Player
 {
+    [System.Serializable]
+    public class PlayerTimer
+    {
+        public float timer;
+        public float currentTime;
+    }
+    //player 상태
     public class PlayerFSM : MonoBehaviour
     {
         public enum State
@@ -23,8 +31,19 @@ namespace MyRPG.Player
 
         //마우스 클릭 지점, 플레이어가 이동할 목적지의 좌표를 저장할 예정
         private Vector3 currentTargetPos;
-
+        //공격할 적 선택
         private GameObject currentEnemy;
+
+        //지뢰 설치
+        public GameObject minePrefab;
+        private int mineIndex;
+        public int mineMaxIndex = 5;
+        //지뢰 자동 폭파 시간
+        [SerializeField] private PlayerTimer mineTime;
+        //드론 소환
+        public GameObject dronePrefab;
+        [HideInInspector] public GameObject currentDrone;
+        [SerializeField] private PlayerTimer droneTime;
 
         //이동
         public float rotAnglePerSecoud = 360f;  //1초에 플레이어의 방향을 360도 회전한다
@@ -45,8 +64,8 @@ namespace MyRPG.Player
         private PlayerAni ani;
 
         private PlayerParams playerParams;
-        private float saveTime = 30f;
-        private float timer = 0f;
+        //세이브 시간
+        [SerializeField] private PlayerTimer SaveTime;
         public Transform effectPos;
 
         private EnemyParams enemyParams;
@@ -60,6 +79,7 @@ namespace MyRPG.Player
         }
         private void Init()
         {
+            mineIndex = mineMaxIndex;
             playerParams.InitParams();
             currentStamina = stamina; // 스태미나 초기화
             playerParams.dieEvent += ChangeToPlayerDie;
@@ -76,8 +96,6 @@ namespace MyRPG.Player
         public void CurrentEnemyDie()
         {
             ChangeState(State.Idle, PlayerAni.Ani_idle);
-            print("enemy was killed");
-
             currentEnemy = null;
         }
         public void AttackCalculate()
@@ -199,7 +217,7 @@ namespace MyRPG.Player
         void DeadState()
         {
 
-        }   
+        }
         public void AttackEnemy(GameObject enemy)
         {
             if(currentEnemy != null && currentEnemy == enemy) return;
@@ -263,40 +281,97 @@ namespace MyRPG.Player
         }
         private void Update()
         {
+            //플레이어가 죽으면 리턴
             if (playerParams.isDie) return;
+            //일정시간 뒤에 세이브
             SaveTimer();
+            //D키를 누르면 로드
             if (Input.GetKeyDown(KeyCode.D))
             {
-                playerParams.LoadPlayerData();
+                //playerParams.LoadPlayerData();
             }
+            //플레이어 UI 업데이트하여 경험치,hp 등등
             UIManager.instance.UpdatePlayerUI(playerParams);
             staminaImage.fillAmount = Mathf.Lerp(staminaImage.fillAmount,currentStamina/stamina,Time.deltaTime*5f);
+            //상태 업데이트
             UpdateState();
+            //Idle상태일 때 5의 속도로 HP 회복
             if(currentState == State.Idle)
             {
                 playerParams.StartHealing();
             }
+            //움직이고 있으면 2의 속도로 HP 회복
             else
             {
                 playerParams.StartHealing(2);
             }
+            //스태미나가 0.01보다 작으면 뛰기 불가능
             if(currentStamina <0.01f)
             {
                 isRun = false;
             }
+            //스태미나가 1이상일 때만 뛰기 가능
             else if (currentStamina > 1f)
             {
                 isRun = Input.GetKey(SaveManager.Instance.GetKey("Run"));
             }
+            ResetMineIndex();
+            SpawnDron();
         }
         private void SaveTimer()
         {
-            timer += Time.deltaTime;
-            if (timer >= saveTime)
+            SaveTime.currentTime += Time.deltaTime;
+            if (SaveTime.currentTime >= SaveTime.timer)
             {
                 playerParams.SavePlayerData();
                 Debug.Log("자동저장 완료");
-                timer = 0f;
+                SaveTime.currentTime = 0f;
+            }
+        }
+        private void ResetMineIndex()
+        {
+            if (Input.GetKeyDown(KeyCode.T) && mineIndex > 0)
+            {
+                Vector3 spawnPosition = transform.position + transform.forward * 1.2f;
+                GameObject Landmine = Instantiate(minePrefab, spawnPosition, Quaternion.identity);
+                Landmine.transform.forward = transform.forward;
+                if(Landmine.GetComponent<TriggerLandMine>().damageEff)
+                {
+                    TriggerDamage damage = Landmine.GetComponent<TriggerLandMine>().damageEff.GetComponent<TriggerDamage>();
+                    damage.damageamount = playerParams.GetRandomAttack();
+                }
+                mineIndex--;
+            }
+            if (mineIndex < mineMaxIndex)
+            {   
+                mineTime.currentTime += Time.deltaTime;
+                if(mineTime.currentTime >= mineTime.timer)
+                {
+                    mineIndex++;
+                    mineTime.currentTime = 0;
+                }
+            }
+        }
+        void SpawnDron()
+        {
+            if(Input.GetKeyDown(KeyCode.K) && currentDrone == null)
+            {
+                Vector3 spawnpos = transform.position + transform.forward * 2;
+                spawnpos.y = dronePrefab.transform.position.y;
+
+                currentDrone = Instantiate(dronePrefab, spawnpos, Quaternion.identity);
+                currentDrone.GetComponent<DroneFSM>().SetPlayer(transform);
+            }
+            
+            if(currentDrone)
+            {
+                droneTime.currentTime += Time.deltaTime;
+                if(droneTime.currentTime >= droneTime.timer)
+                {
+                    Destroy(currentDrone);
+                    currentDrone = null;
+                    droneTime.currentTime = 0;
+                }
             }
         }
     }

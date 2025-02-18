@@ -37,7 +37,6 @@ namespace MyRPG.Player
         {
             mainCam = Camera.main;
             control = mainCam.GetComponent<CameraControl>();
-            data = SaveSystem.LoadDataPlayer();
             if (data != null)
             {
                 LoadPlayerData();
@@ -49,7 +48,7 @@ namespace MyRPG.Player
                 }
                 Debug.Log("저장이 잘 되어 로드합니다");
             }
-            else
+            else if (data == null)
             {
                 SavePlayerData();
                 data = SaveSystem.LoadDataPlayer();

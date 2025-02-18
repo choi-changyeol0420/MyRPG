@@ -1,16 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using MyRPG.Effect;
 using UnityEngine;
 
 namespace MyRPG.Player
 {
-    public class TriggerLandMine : MonoBehaviour
+    public class TriggerLandMine : TriggerEffect
     {
         #region Variables
-        private HashSet<GameObject> damageobject = new HashSet<GameObject>();
-
         public GameObject effect;
-        public GameObject damageEffect;
+
+        private float timer;
+        [SerializeField] private float timeSet = 10;
         #endregion
         private void Start()
         {
@@ -20,23 +19,28 @@ namespace MyRPG.Player
                 Destroy(effectgo, 2f);
             }
         }
-        private void OnTriggerEnter(Collider other)
+        
+        private void Update()
         {
-            if(other.tag == "Enemy")
+            if(!damageEff)
             {
-                if(damageEffect)
+                timer += Time.deltaTime;
+                if(timer >= timeSet)
                 {
-                    GameObject damageEff = Instantiate(damageEffect, transform.position, Quaternion.identity);
-                    Destroy(gameObject,2);
+                    damageEff = Instantiate(damageEffect, transform.position, Quaternion.identity);
+                    Destroy(gameObject);
+                    Destroy(damageEff, 1);
                 }
             }
-            damageobject.Add(other.gameObject);
-            StartCoroutine(ResetCollision(other.gameObject));
         }
-        IEnumerator ResetCollision (GameObject other)
+        public override void EffectTrigger(Collider other)
         {
-            yield return new WaitForSeconds(0.5f);
-            damageobject.Remove(other);
+            if (damageEffect)
+            {
+                damageEff = Instantiate(damageEffect, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+                Destroy(damageEff, 1);
+            }
         }
     }
 }
