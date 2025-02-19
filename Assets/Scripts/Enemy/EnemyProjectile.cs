@@ -15,7 +15,7 @@ namespace MyRPG.Enemy
         #endregion
         void Start()
         {
-            target = GameObject.FindGameObjectWithTag("PlayerPoint;").transform; // 플레이어 찾기
+            target = GameObject.FindGameObjectWithTag("PlayerPoint").transform; // 플레이어 찾기
             Destroy(gameObject, lifetime); // 일정 시간이 지나면 삭제
         }
 

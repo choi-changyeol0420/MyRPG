@@ -1,14 +1,13 @@
-using MyRPG.Manager;
 using MyRPG.Player;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AI;
 
 namespace MyRPG.Enemy
 {
     public enum State
     {
         Idle,
+        Patrol,
         Chase,
         Attack,
         Die,
@@ -17,39 +16,46 @@ namespace MyRPG.Enemy
     public class EnemyFSM : MonoBehaviour
     {
         #region Variables
-        public State currentState = State.Idle;
+        public State currentState = State.Patrol;
 
         [HideInInspector]public EnemyParams enemyParams;
         private EnemyAni myAni;
 
         private Transform player;
         private PlayerParams playerParams;
+        private NavMeshAgent agent;
 
-        float chaseDistance = 5f;
-        float attackDistance = 2.5f;
-        float reChaseDistance = 3f;
+        [SerializeField] private float chaseDistance = 15;
+        [SerializeField] private float attackDistance = 5;
+        [SerializeField] private float reChaseDistance = 10;
 
-        float rotAnglePerSecond = 360f;
-        float movespeed = 1.3f;
+        private float attackDelay = 2f;
+        private float attackTimer = 0f;
 
-        float attackDelay = 2f;
-        float attackTimer = 0f;
+        private Vector3 originalPosition;
+        private Vector3 randowPosition;
+        private bool moveToRandom = true;
 
         public GameObject effect;
 
         public GameObject projectilePrefab;
         public Transform firePoint;
+
+        private float timer = 0;
+        [SerializeField]private float nameHealthBartime = 5;
         #endregion
 
         private void Awake()
         {
             myAni = GetComponent<EnemyAni>();
             enemyParams = GetComponent<EnemyParams>();
+            agent = GetComponent<NavMeshAgent>();
+            originalPosition = transform.position;
             enemyParams.InitParams();
             enemyParams.dieEvent += CallDieEvent;
-            ChangeState(State.Idle, EnemyAni.IDLE);
             player = GameObject.FindGameObjectWithTag("Player").transform;
             playerParams = player.GetComponent<PlayerParams>();
+            SetRandomPosition();
         }
         void UpdateState()
         {
@@ -57,6 +63,9 @@ namespace MyRPG.Enemy
             {
                 case State.Idle:
                     IdleState();
+                    break;
+                case State.Patrol:
+                    PatrolState();
                     break;
                 case State.Chase:
                     ChaseState();
@@ -71,6 +80,11 @@ namespace MyRPG.Enemy
                     NoState();
                     break;
             }
+        }
+        private void SetRandomPosition()
+        {
+            Vector3 Randompos = new Vector3(Random.Range(-3f, 3f), 0, Random.Range(-3f, 3f));
+            randowPosition = originalPosition + Randompos;
         }
         public void AttackCalculate()
         {
@@ -91,7 +105,7 @@ namespace MyRPG.Enemy
         {
             ChangeState(State.Die, EnemyAni.DIE);
             player.gameObject.SendMessage("CurrentEnemyDie");
-            playerParams.AddExperience(enemyParams.exp + 50);
+            playerParams.AddExperience(enemyParams.enemies.exp);
         }
         public void ChangeState(State newState, int EnemyAni)
         {
@@ -114,36 +128,32 @@ namespace MyRPG.Enemy
         }
         void ChaseState()
         {
-            if (GetDistanceFromPlayer() > chaseDistance)
+            agent.destination = player.position;
+        }
+        void PatrolState()
+        {
+            if(agent.remainingDistance < 0.5f && ! agent.pathPending)
             {
-                ChangeState(State.Idle, EnemyAni.IDLE);
-            }
-            if (GetDistanceFromPlayer() < attackDistance)
-            {
-                ChangeState(State.Attack, EnemyAni.ATTACK);
-            }
-            else
-            {
-                TurnToDestination();
-                MoveToDestination();
+                if(moveToRandom)
+                {
+                    agent.destination = originalPosition;
+                }
+                else
+                {
+                    SetRandomPosition();
+                    agent.destination = randowPosition;
+                }
+                moveToRandom = !moveToRandom;
             }
         }
         void AttackState()
         {
-            if(GetDistanceFromPlayer() > reChaseDistance)
+            if (Time.time >= attackTimer)
             {
-                attackTimer = 0;
-                ChangeState(State.Chase,EnemyAni.WALK);
-            }
-            else
-            {
-                if (Time.time >= attackTimer)
-                {
-                    transform.LookAt(player.position);
-                    myAni.ChangeState(EnemyAni.ATTACK);
+                transform.LookAt(player.position);
+                myAni.ChangeState(EnemyAni.ATTACK);
 
-                    attackTimer = Time.time + attackDelay;
-                }
+                attackTimer = Time.time + attackDelay;
             }
         }
         void DieState()
@@ -156,17 +166,16 @@ namespace MyRPG.Enemy
 
 
         }
-
-        void TurnToDestination()
+        void CheckStateChange()
         {
-            Quaternion lookRotation = Quaternion.LookRotation(player.position - transform.position);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotAnglePerSecond);
+            if (GetDistanceFromPlayer() < attackDistance) ChangeState(State.Attack, EnemyAni.ATTACK);
+            else if (GetDistanceFromPlayer() < reChaseDistance)
+            {
+                attackTimer = 0;
+                ChangeState(State.Chase, EnemyAni.WALK); 
+            }
+            else if (GetDistanceFromPlayer() > chaseDistance) ChangeState(State.Patrol, EnemyAni.WALK);
         }
-        void MoveToDestination()
-        {
-            transform.position = Vector3.MoveTowards(transform.position, player.position,movespeed * Time.deltaTime);
-        }
-
         float GetDistanceFromPlayer()
         {
             float distance = Vector3.Distance(transform.position, player.position);
@@ -176,8 +185,22 @@ namespace MyRPG.Enemy
         private void Update()
         {
             UpdateState();
+            CheckStateChange();
+            SetNameHealthBar();
             float fill = enemyParams.curHP / enemyParams.maxHP;
             enemyParams.healthBar.fillAmount = Mathf.Lerp(enemyParams.healthBar.fillAmount, fill, Time.deltaTime * 5f);
+        }
+        void SetNameHealthBar()
+        {
+            if(enemyParams.enemyName.gameObject.activeSelf)
+            {
+                timer += Time.deltaTime;
+                if(timer >= nameHealthBartime)
+                {
+                    enemyParams.enemyName.gameObject.SetActive(false);
+                    timer = 0;
+                }
+            }
         }
     }
 }

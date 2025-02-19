@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6130bed9db84a2744b1db4da2d2e4652, type: 3}
+  m_Name: AlienAttribute
+  m_EditorClassIdentifier: 
+  enemyname: Alien
+  level: 1
+  maxHp: 50
+  attackMax: 5
+  attackMin: 2
+  defense: 1
+  exp: 50
+  rewardMoneyMax: 20
+  rewardMoneyMin: 10

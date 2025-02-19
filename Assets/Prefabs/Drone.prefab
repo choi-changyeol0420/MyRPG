@@ -159,6 +159,7 @@ MonoBehaviour:
   attackRange: 10
   fireRate: 1
   projectile: {fileID: 4076565702894455824, guid: a92f0261120d82a4aae8f4766941b319, type: 3}
+  bullet: {fileID: 0}
   firePoint: {fileID: 244170097907128213}
 --- !u!1 &5699947030721920154
 GameObject:
