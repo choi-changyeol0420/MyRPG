@@ -56,7 +56,7 @@ public class ExpTooltipUI : MonoBehaviour
     // ✅ 툴팁 텍스트 업데이트 및 배경 크기 조정
     private void UpdateTooltip()
     {
-        tooltipText.text = playerParams.curExp + "/" + playerParams.expToNextLevel; 
+        tooltipText.text = playerParams.stat.exp + "/" + playerParams.stat.expToNextLevel; 
 
         // 텍스트 길이에 맞춰 배경 크기 자동 조정
         Vector2 textSize = new Vector2(tooltipText.preferredWidth + 20f, tooltipText.preferredHeight + 10f);

@@ -23,6 +23,8 @@ namespace MyRPG.Enemy
         //UI
         public Image healthBar;
         public TextMeshProUGUI enemyName;
+
+        private System.Random random = new System.Random();
         #endregion
         public int GetRandomAttack()
         {
@@ -50,11 +52,17 @@ namespace MyRPG.Enemy
             isDie = false;
         }
 
-        public void TakeDamage(float damage)
+        public void TakeDamage(float damage, float CritChance = 0, float critMult = 2)
         {
             if (isDie) return;
             enemyName.gameObject.SetActive(true);
             healthBar.gameObject.SetActive(true);
+            bool isCritical = random.NextDouble() * 100 < CritChance;
+            if (isCritical)
+            {
+                damage *= critMult;
+                Debug.Log("크리티컬");
+            }
             // 방어력 적용 공식: 받은 피해량 = 기본 피해량 - (방어력 * 피해 감소율)
             float damageReduction = enemies.defense * 0.2f; // 방어력의 20%만큼 피해 감소
             float finalDamage = Mathf.Max(damage - damageReduction, 1); // 최소 1 이상의 피해 적용

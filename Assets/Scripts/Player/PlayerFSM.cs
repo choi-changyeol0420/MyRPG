@@ -47,8 +47,7 @@ namespace MyRPG.Player
 
         //이동
         public float rotAnglePerSecoud = 360f;  //1초에 플레이어의 방향을 360도 회전한다
-        public float moveSpeed;            //초당 이동 속도
-        private float walkSpeed = 3f;            //초당 이동 속도
+        private float walkSpeed;            //초당 이동 속도
         private bool isRun;
         public float stamina = 5f;     // 최대 스태미나 (초 단위)
         public float staminaRecoveryRate = 1f; // 초당 스태미나 회복량
@@ -111,8 +110,8 @@ namespace MyRPG.Player
             if(damageable != null)
             {
                 enemy.enemyParams.healthBar.color = Color.red;
-                int attackPower = playerParams.GetRandomAttack();
-                damageable.TakeDamage(attackPower);
+                int attackPower = (int)playerParams.attackTotal;
+                damageable.TakeDamage(attackPower,playerParams.stat.critChance);
                 yield return new WaitForSeconds(0.7f);
                 enemy.enemyParams.healthBar.color = Color.white;
             }
@@ -263,9 +262,9 @@ namespace MyRPG.Player
         void MoveToDesination(bool isRunning)
         {
             //Vector3.MoveTowards(시작지점,목표지점,최대이동거리)
-            moveSpeed = isRunning ? walkSpeed * 2f : walkSpeed;
+            walkSpeed = isRunning ? playerParams.stat.moveSpeed * 2f : playerParams.stat.moveSpeed;
 
-            transform.position = Vector3.MoveTowards(transform.position,currentTargetPos,moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position,currentTargetPos, walkSpeed * Time.deltaTime);
             if(currentEnemy == null)
             {
                 //플레이어의 위치와 목표지점의 위치가 같으면, 상태를 idle상태로 바꾸라는 명령
@@ -282,7 +281,7 @@ namespace MyRPG.Player
         private void Update()
         {
             //플레이어가 죽으면 리턴
-            if (playerParams.isDie) return;
+            if (playerParams.stat.isDie) return;
             //일정시간 뒤에 세이브
             SaveTimer();
             //D키를 누르면 로드
@@ -338,7 +337,7 @@ namespace MyRPG.Player
                 if(Landmine.GetComponent<TriggerLandMine>().damageEff)
                 {
                     TriggerDamage damage = Landmine.GetComponent<TriggerLandMine>().damageEff.GetComponent<TriggerDamage>();
-                    damage.damageamount = playerParams.GetRandomAttack();
+                    damage.damageamount = (int)playerParams.attackTotal;
                 }
                 mineIndex--;
             }

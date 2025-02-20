@@ -7,77 +7,58 @@ using UnityEngine.UI;
 
 namespace MyRPG.Player
 {
-    public class PlayerParams : CharacterParams
+    [System.Serializable]
+    public class PlayerStat
+    {
+        public string playerName = "ch";
+        public int expToNextLevel { get; set; }
+        public int level = 1;
+        public int exp = 0;
+        public int statPoints = 0;
+
+        public int strength = 5;
+        public int dexterity = 5;
+        public int intelligence = 5;
+        public int defense = 3;
+        public int tempStr;
+        public int tempDex;
+        public int tempInt;
+        public int tempDef = 3;
+
+        public float maxHP = 100f;
+        public float moveSpeed = 3f;
+        public float critChance = 10;
+
+        public int attackMin = 3;
+        public int attackMax = 5;
+
+        public int money = 0;
+        public Vector3 curPosition;
+
+        public float curHP { get; set; }
+        public bool isDie { get; set; }
+    }
+    public class PlayerParams : CharacterParams, IDamageable
     {
         #region Variables
-        //player속성
-        [HideInInspector] public int expToNextLevel { get; set; }
-        [HideInInspector] public string playerName = "ch";
-        [HideInInspector] public int curLevel = 1;
-        [HideInInspector] public float curMaxHP = 100f;
-        [HideInInspector] public int curAttackMin = 5;
-        [HideInInspector] public int curAttackMax = 10;
-        [HideInInspector] public int curDefense = 3;
-        [HideInInspector] public int curExp = 0;
-        [HideInInspector] public int curMoney = 0;
-        [HideInInspector] public Vector3 curPosition;
-
-        //체력 회복
-        private float healDelay = 3f; // 피해를 입은 후 회복 시작까지의 대기 시간
-        private float lastDamageTime; // 마지막으로 피해를 입은 시간
-        public Image expImg;
-        public TextMeshProUGUI exptext;
-        private Camera mainCam;
-        private CameraControl control;
-
-        public UnityAction OnLevelUp;
+        public float attackTotal;
         #endregion
-
-        public override void InitParams()
-        {
-            mainCam = Camera.main;
-            control = mainCam.GetComponent<CameraControl>();
-            if (data != null)
-            {
-                LoadPlayerData();
-                curHP = data.maxHP;
-                expToNextLevel = 100 * curLevel;
-                if (UIManager.instance != null)
-                {
-                    UIManager.instance.UpdatePlayerUI(this);
-                }
-                Debug.Log("저장이 잘 되어 로드합니다");
-            }
-            else if (data == null)
-            {
-                SavePlayerData();
-                data = SaveSystem.LoadDataPlayer();
-                curHP = data.maxHP;
-                expToNextLevel = 100 * curLevel;
-                Debug.Log("저장한 데이터가 없습니다");
-            }
-        }
-        protected override void UpdateAfterReceiveAttack()
-        {
-            base.UpdateAfterReceiveAttack();
-            lastDamageTime = Time.time; // 피해를 입은 시간 갱신
-        }
         public void StartHealing(float healRate = 5f)
         {
-            if (curHP < data.maxHP)
+            if (stat.curHP < data.maxHP)
             {
                 // 마지막으로 피해를 입은 후 일정 시간이 지나면 회복 시작
                 if (Time.time - lastDamageTime >= healDelay)
                 {
-                    curHP += healRate * Time.deltaTime;
-                    curHP = Mathf.Clamp(curHP, 0, data.maxHP); // 체력 초과 방지
+                    stat.curHP += healRate * Time.deltaTime;
+                    stat.curHP = Mathf.Clamp(stat.curHP, 0, data.maxHP); // 체력 초과 방지
                 }
             }
         }
         public void AddExperience(int amount)
         {
-            curExp += amount;
-            while (curExp >= expToNextLevel)
+            stat.exp += amount;
+            while (stat.exp >= stat.expToNextLevel)
             {
                 LevelUp();
             }
@@ -85,64 +66,82 @@ namespace MyRPG.Player
         }
         private void LevelUp()
         {
-            curExp -= expToNextLevel;
-            curLevel++;
-            expToNextLevel = Mathf.RoundToInt(expToNextLevel * 1.2f);
+            stat.exp -= stat.expToNextLevel;
+            stat.level++;
+            stat.expToNextLevel = Mathf.RoundToInt(stat.expToNextLevel * 1.2f);
 
-            curMaxHP += 10;
-            data.maxHP = curMaxHP;
-            curAttackMax += 5;
-            curAttackMin += 2;
+            stat.statPoints += 5;
             OnLevelUp?.Invoke();
-            if (curLevel % 5 == 0)
-            {
-                curDefense += 2;
-            }
+            OnStatsUpdate?.Invoke();
         }
-        public void SavePlayerData()
+        protected float GetRandomAttack()
         {
-            data = new CharacterData
-            {
-                Name = playerName,
-                level = curLevel,
-                maxHP = curMaxHP,
-                attackMax = curAttackMax,
-                attackMin = curAttackMin,
-                defense = curDefense,
-                Exp = curExp,
-                money = curMoney,
-                position = new float[] { transform.position.x, transform.position.y, transform.position.z },
-                camOffSet = new float[] {control.GetCameraOffset().x,control.GetCameraOffset().y,control.GetCameraOffset().z}
-            };
-            SaveSystem.SaveDataPlayer(data);
+            attackTotal = Random.Range(data.attackMin, data.attackMax + 1);
+            return attackTotal;
         }
-        public void LoadPlayerData()
+        public void TakeDamage(float Damage, float CritChance = 0, float critMult = 2)
         {
-            data = SaveSystem.LoadDataPlayer();
-            if (data != null)
-            {
-                playerName = data.Name;
-                curLevel = data.level;
-                curMaxHP = data.maxHP;
-                curAttackMax = data.attackMax;
-                curAttackMin = data.attackMin;
-                curDefense = data.defense;
-                curExp = data.Exp;
-                curMoney = data.money;
-                curPosition = new Vector3(data.position[0], data.position[1], data.position[2]);
-                transform.position = curPosition;
-                control.UpdateCameraPosition(new Vector3(data.camOffSet[0], data.camOffSet[1], data.camOffSet[2]));
-                Debug.Log($"로드 완료!");
-            }
-            else
-            {
-                Debug.Log($"실패");
-            }
-            
+            if (stat.isDie) return;
+            // 방어력 적용 공식: 받은 피해량 = 기본 피해량 - (방어력 * 피해 감소율)
+            float damageReduction = data.defense * 0.2f; // 방어력의 20%만큼 피해 감소
+            float finalDamage = Mathf.Max(Damage - damageReduction, 1); // 최소 1 이상의 피해 적용
+            stat.curHP -= finalDamage;
+            UpdateAfterReceiveAttack();
         }
-        private void OnApplicationQuit()
+        //캐릭터가 적으로 부터 공격을 받은 뒤에 자동으로 실행될 함수를 가상함수로 만듬
+        private void UpdateAfterReceiveAttack()
         {
-            SaveSystem.SaveDataPlayer(data);
+            //print(name + "'s HP: " + curHP);
+            if (stat.curHP <= 0)
+            {
+                stat.curHP = 0;
+                stat.isDie = true;
+                dieEvent?.Invoke(gameObject);
+            }
+            lastDamageTime = Time.time; // 피해를 입은 시간 갱신
         }
+        #region Stat
+        private bool IncreaseStat( ref int stats, ref int tempStat, int Points)
+        {
+            if (stat.statPoints <= 0) return false;
+            stats += Points;
+            tempStat += Points;
+            stat.statPoints -= Points;
+            OnStatsUpdate?.Invoke();
+            return true;
+        }
+        private bool DecreaseStat(ref int stats, ref int tempStat, int Points)
+        {
+            if (tempStat <= 0) return false;
+            stats -= Points;
+            tempStat -= Points;
+            stat.statPoints += Points;
+            OnStatsUpdate?.Invoke();
+            return true;
+        }
+        private void UpdateStat()
+        {
+            attackTotal = GetRandomAttack() + (stat.strength * 1.2f);
+            stat.moveSpeed += stat.dexterity * 0.15f;
+            stat.critChance += stat.dexterity * 0.35f;
+            stat.maxHP += stat.defense * 0.5f;
+        }
+        public void IncreaseStr() => IncreaseStat(ref stat.strength, ref stat.tempStr, 1);
+        public void IncreaseDex() => IncreaseStat(ref stat.dexterity, ref stat.tempDex, 1);
+        public void IncreaseInt() => IncreaseStat(ref stat.intelligence, ref stat.tempInt, 1);
+        public void IncreaseDef() => IncreaseStat(ref stat.defense, ref stat.tempDef, 1);
+        public void DecreaseStr() => DecreaseStat(ref stat.strength, ref stat.tempStr, 1);
+        public void DecreaseDex() => DecreaseStat(ref stat.dexterity, ref stat.tempDex, 1);
+        public void DecreaseInt() => DecreaseStat(ref stat.intelligence, ref stat.tempInt, 1);
+        public void DecreaseDef() => DecreaseStat(ref stat.defense, ref stat.tempDef, 1);
+        public void ApplyStats()
+        {
+            stat.tempStr = 0;
+            stat.tempDex = 0;
+            stat.tempInt = 0;
+            stat.tempDef = 0;
+            UIManager.instance.UpdateUI();
+        }
+        #endregion
     }
 }

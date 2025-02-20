@@ -26,7 +26,7 @@ namespace MyRPG.Player
         }
         private void Update()
         {
-            if(player.gameObject.GetComponent<PlayerParams>().isDie)
+            if(player.gameObject.GetComponent<PlayerParams>().stat.isDie)
             {
                 Destroy(gameObject);
                 return;

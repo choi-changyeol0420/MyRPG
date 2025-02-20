@@ -88,7 +88,7 @@ namespace MyRPG.Enemy
         }
         public void AttackCalculate()
         {
-            if (playerParams.isDie)
+            if (playerParams.stat.isDie)
             {
                 ChangeState(State.Idle,EnemyAni.IDLE);
                 return;

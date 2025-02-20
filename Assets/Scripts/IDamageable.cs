@@ -3,9 +3,6 @@ using UnityEngine.UI;
 public interface IDamageable
 {
     #region Variables
-    public float curHP { get; set; }
-    public bool isDie { get; set; }
-    public void TakeDamage(float damage);
-    public int GetRandomAttack();
+    public void TakeDamage(float damage, float CritChance = 0, float critMult = 2);
     #endregion
 }
