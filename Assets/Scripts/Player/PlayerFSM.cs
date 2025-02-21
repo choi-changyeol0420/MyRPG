@@ -81,8 +81,11 @@ namespace MyRPG.Player
             mineIndex = mineMaxIndex;
             playerParams.InitParams();
             currentStamina = stamina; // 스태미나 초기화
+            UIManager.instance.AddOnClick(playerParams);
+            UIManager.instance.UpdateUI(playerParams);
             playerParams.dieEvent += ChangeToPlayerDie;
             playerParams.OnLevelUp += HandlevelUp;
+            playerParams.OnStatsUpdate += UIManager.instance.UpdateUI;
         }
         public void ChangeToPlayerDie(GameObject player)
         {

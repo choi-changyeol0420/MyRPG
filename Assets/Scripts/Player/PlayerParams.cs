@@ -20,10 +20,7 @@ namespace MyRPG.Player
         public int dexterity = 5;
         public int intelligence = 5;
         public int defense = 3;
-        public int tempStr;
-        public int tempDex;
-        public int tempInt;
-        public int tempDef = 3;
+        public int[] tempStat = new int[4];
 
         public float maxHP = 100f;
         public float moveSpeed = 3f;
@@ -72,7 +69,7 @@ namespace MyRPG.Player
 
             stat.statPoints += 5;
             OnLevelUp?.Invoke();
-            OnStatsUpdate?.Invoke();
+            OnStatsUpdate?.Invoke(this);
         }
         protected float GetRandomAttack()
         {
@@ -101,22 +98,22 @@ namespace MyRPG.Player
             lastDamageTime = Time.time; // 피해를 입은 시간 갱신
         }
         #region Stat
-        private bool IncreaseStat( ref int stats, ref int tempStat, int Points)
+        private bool IncreaseStat( ref int stats, ref int tempStat, int Points = 1)
         {
             if (stat.statPoints <= 0) return false;
             stats += Points;
             tempStat += Points;
             stat.statPoints -= Points;
-            OnStatsUpdate?.Invoke();
+            OnStatsUpdate?.Invoke(this);
             return true;
         }
-        private bool DecreaseStat(ref int stats, ref int tempStat, int Points)
+        private bool DecreaseStat(ref int stats, ref int tempStat, int Points = 1)
         {
             if (tempStat <= 0) return false;
             stats -= Points;
             tempStat -= Points;
             stat.statPoints += Points;
-            OnStatsUpdate?.Invoke();
+            OnStatsUpdate?.Invoke(this);
             return true;
         }
         private void UpdateStat()
@@ -126,21 +123,50 @@ namespace MyRPG.Player
             stat.critChance += stat.dexterity * 0.35f;
             stat.maxHP += stat.defense * 0.5f;
         }
-        public void IncreaseStr() => IncreaseStat(ref stat.strength, ref stat.tempStr, 1);
-        public void IncreaseDex() => IncreaseStat(ref stat.dexterity, ref stat.tempDex, 1);
-        public void IncreaseInt() => IncreaseStat(ref stat.intelligence, ref stat.tempInt, 1);
-        public void IncreaseDef() => IncreaseStat(ref stat.defense, ref stat.tempDef, 1);
-        public void DecreaseStr() => DecreaseStat(ref stat.strength, ref stat.tempStr, 1);
-        public void DecreaseDex() => DecreaseStat(ref stat.dexterity, ref stat.tempDex, 1);
-        public void DecreaseInt() => DecreaseStat(ref stat.intelligence, ref stat.tempInt, 1);
-        public void DecreaseDef() => DecreaseStat(ref stat.defense, ref stat.tempDef, 1);
+        public void IncreaseStat(StatType index)
+        {
+            switch (index)
+            {
+                case StatType.STR:
+                    IncreaseStat(ref stat.strength, ref stat.tempStat[(int)index]);
+                    break;
+                case StatType.DEX:
+                    IncreaseStat(ref stat.dexterity, ref stat.tempStat[(int)index]);
+                    break;
+                case StatType.INT:
+                    IncreaseStat(ref stat.intelligence, ref stat.tempStat[(int)index]);
+                    break;
+                case StatType.DEF:
+                    IncreaseStat(ref stat.defense, ref stat.tempStat[(int)index]);
+                    break;
+            }
+        }
+            
+        public void DecreaseStat(StatType index)
+        {
+            switch(index)
+            {
+                case StatType.STR:
+                    DecreaseStat(ref stat.strength, ref stat.tempStat[(int)index]);
+                    break;
+                case StatType.DEX:
+                    DecreaseStat(ref stat.dexterity, ref stat.tempStat[(int)index]);
+                    break;
+                case StatType.INT:
+                    DecreaseStat(ref stat.intelligence, ref stat.tempStat[(int)index]);
+                    break;
+                case StatType.DEF:
+                    DecreaseStat(ref stat.defense, ref stat.tempStat[(int)index]);
+                    break;
+            }
+        }
         public void ApplyStats()
         {
-            stat.tempStr = 0;
-            stat.tempDex = 0;
-            stat.tempInt = 0;
-            stat.tempDef = 0;
-            UIManager.instance.UpdateUI();
+            for(int i = 0; i< stat.tempStat.Length; i++)
+            {
+                stat.tempStat[i] = 0;
+            }
+            UIManager.instance.UpdateUI(this);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace MyRPG.Player
 {
@@ -20,6 +21,7 @@ namespace MyRPG.Player
         {
             if (Input.GetMouseButtonDown(0))
             {
+                if (EventSystem.current.IsPointerOverGameObject()) return;
                 //카메라로부터 화면사의 좌표를 관통하는 가상의 선(레이)을 생성해서 리턴해 주는 함수
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -31,7 +33,7 @@ namespace MyRPG.Player
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider.gameObject.name == "Terrain")
+                    if (hit.collider.gameObject.name == ("Terrain"))
                     {
                         //player.transform.position = hit.point;
                         bool isRunning = Input.GetKey(KeyCode.LeftShift);
@@ -39,7 +41,7 @@ namespace MyRPG.Player
                         player.GetComponent<PlayerFSM>().MoveTo(hit.point);
 
                     }
-                    else if(hit.collider.gameObject.tag == "Enemy")
+                    else if (hit.collider.gameObject.tag == "Enemy")
                     {
                         player.GetComponent<PlayerFSM>().AttackEnemy(hit.collider.gameObject);
                     }

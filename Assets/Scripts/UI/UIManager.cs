@@ -1,3 +1,4 @@
+using MyRPG.Manager;
 using MyRPG.Player;
 using TMPro;
 using UnityEngine;
@@ -23,10 +24,20 @@ namespace MyRPG
         public TextMeshProUGUI moneyText;
         public TextMeshProUGUI healthText;
 
-        public TextMeshProUGUI[] statsPointText;
-        public Button[] increaseButton;
-        public Button[] decreaseButton;
+        public TextMeshProUGUI[] statsText;
+        public TextMeshProUGUI[] statsPointText = new TextMeshProUGUI[4];
+        public TextMeshProUGUI pointText;
         public Button applyButton;
+
+        public Button statCanvasButton;
+        public GameObject statCanvas;
+        public GameObject statButton;
+        public Transform statgroup;
+
+        public GameObject img;
+
+        private StatButtonUI[] buttonUI = new StatButtonUI[4];
+        private GameObject[] statUI = new GameObject[4];
         #endregion
         public void UpdatePlayerUI(CharacterParams character)
         {
@@ -43,21 +54,50 @@ namespace MyRPG
         }
         public void AddOnClick(PlayerParams player)
         {
-            increaseButton[0].onClick.AddListener(() => player.IncreaseStr());
-            increaseButton[1].onClick.AddListener(() => player.IncreaseDex());
-            increaseButton[2].onClick.AddListener(() => player.IncreaseInt());
-            increaseButton[3].onClick.AddListener(() => player.IncreaseDef());
+            statCanvasButton.onClick.AddListener(() => StatCanvasMenu());
 
-            decreaseButton[0].onClick.AddListener(() => player.DecreaseStr());
-            decreaseButton[1].onClick.AddListener(() => player.DecreaseDex());
-            decreaseButton[2].onClick.AddListener(() => player.DecreaseInt());
-            decreaseButton[3].onClick.AddListener(() => player.DecreaseDef());
-
-            applyButton.onClick.AddListener(() => player.ApplyStats());
+            for (int i = 0; i < statUI.Length; i++)
+            {
+                statUI[i] = Instantiate(statButton, statgroup.position, Quaternion.identity);
+                statUI[i].transform.SetParent(statgroup);
+                buttonUI[i] = statUI[i].GetComponent<StatButtonUI>();
+                int index = i;
+                buttonUI[i].increaseButton.onClick.RemoveAllListeners();
+                buttonUI[i].increaseButton.onClick.AddListener(() => player.IncreaseStat((StatType)index));
+                buttonUI[i].decreaseButton.onClick.RemoveAllListeners();
+                buttonUI[i].decreaseButton.onClick.AddListener(() => player.DecreaseStat((StatType)index));
+            }
+                applyButton.onClick.AddListener(() => player.ApplyStats());
         }
-        public void UpdateUI()
-        {
 
+        public void UpdateUI(PlayerParams player)
+        {
+            img.SetActive(player.stat.statPoints > 0); 
+            pointText.text = player.stat.statPoints.ToString();
+
+            statsText[0].text = "Str: " + player.stat.strength.ToString();
+            statsText[1].text = "Dex: " + player.stat.dexterity.ToString();
+            statsText[2].text = "Int: " + player.stat.intelligence.ToString();
+            statsText[3].text = "Def: " + player.stat.defense.ToString();
+
+            for(int i = 0 ;i< buttonUI.Length;i++)
+            {
+                statsPointText[i] = buttonUI[i].tempStat;
+                statsPointText[i].text = player.stat.tempStat[i].ToString();
+            }
+        }
+        public void StatCanvasMenu()
+        {
+            statCanvas.SetActive(!statCanvas.activeSelf);
         }
     }
+
+    public enum StatType
+    {
+        STR,
+        DEX,
+        INT,
+        DEF
+    }
 }
+
