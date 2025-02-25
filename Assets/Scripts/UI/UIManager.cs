@@ -77,7 +77,7 @@ namespace MyRPG
 
             statsText[0].text = "Str: " + player.stat.strength.ToString();
             statsText[1].text = "Dex: " + player.stat.dexterity.ToString();
-            statsText[2].text = "Int: " + player.stat.intelligence.ToString();
+            statsText[2].text = "Cyb: " + player.stat.cybernetics.ToString();
             statsText[3].text = "Def: " + player.stat.defense.ToString();
 
             for(int i = 0 ;i< buttonUI.Length;i++)
@@ -96,7 +96,7 @@ namespace MyRPG
     {
         STR,
         DEX,
-        INT,
+        CYB,
         DEF
     }
 }

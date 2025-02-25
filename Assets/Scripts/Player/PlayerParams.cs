@@ -18,7 +18,7 @@ namespace MyRPG.Player
 
         public int strength = 5;
         public int dexterity = 5;
-        public int intelligence = 5;
+        public int cybernetics = 5;
         public int defense = 3;
         public int[] tempStat = new int[4];
 
@@ -133,15 +133,14 @@ namespace MyRPG.Player
                 case StatType.DEX:
                     IncreaseStat(ref stat.dexterity, ref stat.tempStat[(int)index]);
                     break;
-                case StatType.INT:
-                    IncreaseStat(ref stat.intelligence, ref stat.tempStat[(int)index]);
+                case StatType.CYB:
+                    IncreaseStat(ref stat.cybernetics, ref stat.tempStat[(int)index]);
                     break;
                 case StatType.DEF:
                     IncreaseStat(ref stat.defense, ref stat.tempStat[(int)index]);
                     break;
             }
         }
-            
         public void DecreaseStat(StatType index)
         {
             switch(index)
@@ -152,8 +151,8 @@ namespace MyRPG.Player
                 case StatType.DEX:
                     DecreaseStat(ref stat.dexterity, ref stat.tempStat[(int)index]);
                     break;
-                case StatType.INT:
-                    DecreaseStat(ref stat.intelligence, ref stat.tempStat[(int)index]);
+                case StatType.CYB:
+                    DecreaseStat(ref stat.cybernetics, ref stat.tempStat[(int)index]);
                     break;
                 case StatType.DEF:
                     DecreaseStat(ref stat.defense, ref stat.tempStat[(int)index]);
