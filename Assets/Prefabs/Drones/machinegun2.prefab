@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8920433590491976838}
   - component: {fileID: 7185043222929871213}
   - component: {fileID: 6918977799826081156}
+  - component: {fileID: 3416510271268520268}
   m_Layer: 0
   m_Name: machinegun
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 3127874521189945565}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.40333495, y: 3.9529326, z: -0.8722656}
+  m_LocalPosition: {x: 0, y: 3.9529326, z: -0.8722656}
   m_LocalScale: {x: 0.43001968, y: 0.43001968, z: 0.43001968}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -87,6 +88,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3416510271268520268
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3127874521189945565}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: e755c988ff8dcb14ebb0dec5527f1e42, type: 3}
 --- !u!1 &6854902230885918898
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,7 +121,7 @@ GameObject:
   - component: {fileID: 5772988268213188380}
   - component: {fileID: 1738535297800947306}
   - component: {fileID: 6374089625964608635}
-  - component: {fileID: 5622417820648086660}
+  - component: {fileID: 7505418758625212544}
   m_Layer: 0
   m_Name: gun
   m_TagString: Untagged
@@ -115,7 +138,7 @@ Transform:
   m_GameObject: {fileID: 6854902230885918898}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -1.222, y: 5.215, z: -0.86}
+  m_LocalPosition: {x: -0.825, y: 5.215, z: -0.86}
   m_LocalScale: {x: 0.43001968, y: 0.43001968, z: 0.43001968}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175,28 +198,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &5622417820648086660
-Animator:
-  serializedVersion: 7
+--- !u!64 &7505418758625212544
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6854902230885918898}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2c4f9c29a4b19764da196cf783d00f21, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 2c4f9c29a4b19764da196cf783d00f21, type: 3}
 --- !u!1 &6920993364524997141
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +231,7 @@ GameObject:
   - component: {fileID: 3575483247231429530}
   - component: {fileID: 5903829015984520367}
   - component: {fileID: 1505402469529329836}
-  - component: {fileID: 6190352331080384883}
+  - component: {fileID: 1616468708840038233}
   m_Layer: 0
   m_Name: gun (1)
   m_TagString: Untagged
@@ -225,7 +248,7 @@ Transform:
   m_GameObject: {fileID: 6920993364524997141}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0.418, y: 5.215, z: -0.86}
+  m_LocalPosition: {x: 0.825, y: 5.215, z: -0.86}
   m_LocalScale: {x: 0.43001968, y: 0.43001968, z: 0.43001968}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -285,28 +308,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!95 &6190352331080384883
-Animator:
-  serializedVersion: 7
+--- !u!64 &1616468708840038233
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6920993364524997141}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 2c4f9c29a4b19764da196cf783d00f21, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 2c4f9c29a4b19764da196cf783d00f21, type: 3}
 --- !u!1 &6934488471804310867
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,6 +339,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2207142698200437573}
+  - component: {fileID: 6673388760460942866}
+  - component: {fileID: 638488872238514684}
   m_Layer: 0
   m_Name: machinegun2
   m_TagString: Untagged
@@ -341,3 +366,43 @@ Transform:
   - {fileID: 3575483247231429530}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &6673388760460942866
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934488471804310867}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 5.8
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &638488872238514684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934488471804310867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba77f877851d3a246937438f72951a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followDistance: 3
+  attackRange: 10
+  fireRate: 1
+  projectile: {fileID: 0}
+  bullet: {fileID: 0}
+  firePoints: []

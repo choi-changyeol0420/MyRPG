@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7353649366684155952}
   - component: {fileID: 1097243698058979367}
-  - component: {fileID: 2721493508429495182}
+  - component: {fileID: 6070866253594466479}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -143,7 +143,7 @@ NavMeshAgent:
   m_BaseOffset: 2.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &2721493508429495182
+--- !u!114 &6070866253594466479
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4585840665116169429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3da0248a51fb7f747a449d43a29a068e, type: 3}
+  m_Script: {fileID: 11500000, guid: 4bde34b790155654888a555b51919741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   followDistance: 3
@@ -160,7 +160,8 @@ MonoBehaviour:
   fireRate: 1
   projectile: {fileID: 1118378434304843002, guid: 64686b8f3ac56684b8c0913b67b6f46a, type: 3}
   bullet: {fileID: 0}
-  firePoint: {fileID: 244170097907128213}
+  firePoints:
+  - {fileID: 244170097907128213}
 --- !u!1 &5699947030721920154
 GameObject:
   m_ObjectHideFlags: 0

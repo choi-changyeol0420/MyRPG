@@ -1,24 +1,36 @@
 using MyRPG.Enemy;
+using MyRPG.Player;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace MyRPG.Player
+
+namespace MyRPG.Drone
 {
-    public class DroneFSM : MonoBehaviour
+    [System.Serializable]
+    public class DroneStats
+    {
+        #region Variables
+        public GameObject projectile;
+        [HideInInspector] public GameObject projectilePrefab;
+        public float FireRate;
+        public Transform[] firePoint;
+        #endregion
+    }
+    [RequireComponent(typeof(NavMeshAgent))]
+    public abstract class DroneFSM : MonoBehaviour
     {
         #region Variables
         public float followDistance = 3f;
         public float attackRange = 10f;
         public float fireRate = 1f;
-        public GameObject projectile;
-        [HideInInspector] public GameObject bullet;
-        public Transform firePoint;
+        public DroneStats BasicDrone;
 
         private Transform player;
         private Transform targetEnemy;
         private NavMeshAgent agent;
-        private bool isAttacking = false;
+        private static int upgradeDroneindex = 1;
+        protected bool isAttacking = false;
         #endregion
         private void Start()
         {
@@ -34,7 +46,6 @@ namespace MyRPG.Player
             FindTarget();
             MoveToTarget();
         }
-
         public void SetPlayer(Transform playerpos)
         {
             player = playerpos;
@@ -60,16 +71,15 @@ namespace MyRPG.Player
             if (targetEnemy && !isAttacking)
             {
                 RotateToMoveDirection();
-                StartCoroutine(DroneAttack());
+                DroneAttack();
             }
         }
-        IEnumerator DroneAttack()
+        void DroneAttack()
         {
             isAttacking = true;
             while(targetEnemy)
             {
-                FireProjectile();
-                yield return new WaitForSeconds(fireRate);
+                StartCoroutine(FireProjectile());
             }
             isAttacking = false;
         }
@@ -77,12 +87,21 @@ namespace MyRPG.Player
         {
             if(targetEnemy)
             {
-                float distance = Vector3.Distance(transform.position, targetEnemy.position);
-                if(player)
+                HandleTargetMovement();
+            }
+            else if (player)
+            {
+                HandlePlayerFollowing();
+            }   
+        }
+        private void HandleTargetMovement()
+        {
+            float distance = Vector3.Distance(transform.position, targetEnemy.position);
+            if(player)
+            {
+                float playerDis = Vector3.Distance(transform.position, player.position);
+                if (distance < playerDis)
                 {
-                    float playerDis = Vector3.Distance(transform.position, player.position);
-                    if (distance < playerDis)
-                    {
                         agent.SetDestination(player.position);
                     }
                     else
@@ -98,25 +117,28 @@ namespace MyRPG.Player
                 {
                     agent.ResetPath();
                 }
-            }
-            else if (player)
-            {
-                float playerdistance = Vector3.Distance(transform.position, player.position);
-                if(playerdistance > followDistance)
-                {
-                    agent.SetDestination(player.position);
-                }
-                else
-                {
-                    agent.ResetPath();
-                }
-            }   
         }
-        void FireProjectile()
+        private void HandlePlayerFollowing()
         {
-            if(projectile && targetEnemy)
+            float playerdistance = Vector3.Distance(transform.position, player.position);
+            if(playerdistance > followDistance)
             {
-                bullet = Instantiate(projectile, firePoint.position, firePoint.rotation);
+                agent.SetDestination(player.position);
+            }
+            else
+            {
+                agent.ResetPath();
+            }
+        }
+        protected virtual IEnumerator FireProjectile()
+        {
+            if(BasicDrone.projectile && targetEnemy)
+            {
+                foreach (Transform firePoint in BasicDrone.firePoint)
+                {
+                    GameObject bullet = Instantiate(BasicDrone.projectile, firePoint.position, firePoint.rotation);
+                    yield return new WaitForSeconds(fireRate);
+                }
             }
         }
         void RotateToMoveDirection()
@@ -126,6 +148,15 @@ namespace MyRPG.Player
                 // 적을 바라보도록 회전
                 Quaternion targetRotation = Quaternion.LookRotation(targetEnemy.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+        }
+        public void UpgradeDrone(GameObject Drone)
+        {
+            if(upgradeDroneindex < 3)
+            {
+                upgradeDroneindex++;
+                Instantiate(Drone, transform.position, Quaternion.identity);
+                Destroy(gameObject);
             }
         }
     }
