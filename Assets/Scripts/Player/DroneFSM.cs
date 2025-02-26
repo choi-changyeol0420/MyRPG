@@ -1,6 +1,7 @@
 using MyRPG.Enemy;
 using MyRPG.Player;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,8 +12,8 @@ namespace MyRPG.Drone
     public class DroneStats
     {
         #region Variables
-        public GameObject projectile;
-        [HideInInspector] public GameObject projectilePrefab;
+        public GameObject projectilePrefab;
+        [HideInInspector] public GameObject projectile;
         public float FireRate;
         public Transform[] firePoint;
         #endregion
@@ -21,10 +22,10 @@ namespace MyRPG.Drone
     public abstract class DroneFSM : MonoBehaviour
     {
         #region Variables
+        public GameObject upgradeDrone;
         public float followDistance = 3f;
-        public float attackRange = 10f;
-        public float fireRate = 1f;
-        public DroneStats BasicDrone;
+        public float attackRange;
+        public List<DroneStats> droneStat;
 
         private Transform player;
         private Transform targetEnemy;
@@ -132,12 +133,15 @@ namespace MyRPG.Drone
         }
         protected virtual IEnumerator FireProjectile()
         {
-            if(BasicDrone.projectile && targetEnemy)
+            foreach (DroneStats drone in droneStat)
             {
-                foreach (Transform firePoint in BasicDrone.firePoint)
+                if(drone.projectile && targetEnemy)
                 {
-                    GameObject bullet = Instantiate(BasicDrone.projectile, firePoint.position, firePoint.rotation);
-                    yield return new WaitForSeconds(fireRate);
+                    foreach (Transform firePoint in drone.firePoint)
+                    {
+                        GameObject bullet = Instantiate(drone.projectile, firePoint.position, firePoint.rotation);
+                        yield return new WaitForSeconds(drone.FireRate);
+                    }
                 }
             }
         }
@@ -150,12 +154,13 @@ namespace MyRPG.Drone
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
             }
         }
-        public void UpgradeDrone(GameObject Drone)
+        public void UpgradeDrone()
         {
-            if(upgradeDroneindex < 3)
+            if(upgradeDroneindex < 3 && upgradeDrone)
             {
                 upgradeDroneindex++;
-                Instantiate(Drone, transform.position, Quaternion.identity);
+                GameObject Drone = Instantiate(upgradeDrone, transform.position, Quaternion.identity);
+                Drone.GetComponent<DroneFSM>().SetPlayer(player);
                 Destroy(gameObject);
             }
         }

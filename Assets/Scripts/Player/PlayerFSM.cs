@@ -114,7 +114,7 @@ namespace MyRPG.Player
             if(damageable != null)
             {
                 enemy.enemyParams.healthBar.color = Color.red;
-                int attackPower = (int)playerParams.attackTotal;
+                int attackPower = (int)playerParams.GetRandomAttack();
                 damageable.TakeDamage(attackPower,playerParams.stat.critChance);
                 yield return new WaitForSeconds(0.7f);
                 enemy.enemyParams.healthBar.color = Color.white;
@@ -341,7 +341,7 @@ namespace MyRPG.Player
                 if(Landmine.GetComponent<TriggerLandMine>().damageEff)
                 {
                     TriggerDamage damage = Landmine.GetComponent<TriggerLandMine>().damageEff.GetComponent<TriggerDamage>();
-                    damage.damageamount = (int)playerParams.attackTotal;
+                    damage.damageamount = (int)playerParams.GetRandomAttack();
                 }
                 mineIndex--;
             }

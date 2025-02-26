@@ -1285,46 +1285,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc23178c7345ffb4584654098aee599e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeDrone: {fileID: 0}
   followDistance: 3
   attackRange: 10
-  fireRate: 1
-  projectile: {fileID: 0}
-  bullet: {fileID: 0}
-  firePoints:
-  - {fileID: 3456820061265723518}
-  - {fileID: 4780083996471697109}
-  - {fileID: 5144599904411761492}
-  - {fileID: 4395723899861631351}
-  - {fileID: 8980601261097307806}
-  - {fileID: 0}
-  - {fileID: 3915973116731041735}
-  - {fileID: 5945049807626506053}
-  - {fileID: 5511174796483719594}
-  - {fileID: 681235533881077438}
-  - {fileID: 9177962090620749231}
-  - {fileID: 3024911750152917848}
-  - {fileID: 1235547455993025906}
-  - {fileID: 8591482173250058644}
-  - {fileID: 9197162859884090269}
-  - {fileID: 6362377475734472309}
-  - {fileID: 465225514870297777}
-  - {fileID: 6394376254540667817}
-  missilePoint:
-  - {fileID: 5215150951903437081}
-  - {fileID: 1343969260707766728}
-  - {fileID: 1576094179126952860}
-  - {fileID: 625559470978874668}
-  - {fileID: 8013423338256321542}
-  - {fileID: 4492194261045442257}
-  - {fileID: 5711301808608081531}
-  - {fileID: 8550152213916421155}
-  - {fileID: 7329610241380022830}
-  - {fileID: 8619803608795046241}
-  missile: {fileID: 0}
-  missileFireRate: 2.5
-  machinegunPoint: []
-  machinegun: {fileID: 0}
-  machinegunFireRate: 2.5
+  droneStat:
+  - projectilePrefab: {fileID: 0}
+    projectile: {fileID: 0}
+    FireRate: 1
+    firePoint:
+    - {fileID: 3456820061265723518}
+    - {fileID: 4780083996471697109}
+    - {fileID: 5144599904411761492}
+    - {fileID: 4395723899861631351}
+    - {fileID: 8980601261097307806}
+    - {fileID: 136402143667175492}
+  - projectilePrefab: {fileID: 0}
+    projectile: {fileID: 0}
+    FireRate: 1
+    firePoint:
+    - {fileID: 3915973116731041735}
+    - {fileID: 5945049807626506053}
+    - {fileID: 5511174796483719594}
+    - {fileID: 681235533881077438}
+    - {fileID: 9177962090620749231}
+    - {fileID: 3024911750152917848}
+    - {fileID: 1235547455993025906}
+    - {fileID: 8591482173250058644}
+    - {fileID: 9197162859884090269}
+    - {fileID: 6362377475734472309}
+    - {fileID: 465225514870297777}
+    - {fileID: 6394376254540667817}
+  - projectilePrefab: {fileID: 0}
+    projectile: {fileID: 0}
+    FireRate: 5
+    firePoint:
+    - {fileID: 5215150951903437081}
+    - {fileID: 1343969260707766728}
+    - {fileID: 1576094179126952860}
+    - {fileID: 625559470978874668}
+    - {fileID: 8013423338256321542}
+    - {fileID: 4492194261045442257}
+    - {fileID: 5711301808608081531}
+    - {fileID: 8550152213916421155}
+    - {fileID: 7329610241380022830}
+    - {fileID: 8619803608795046241}
 --- !u!1 &7609878826054185513
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,7 +20,7 @@ namespace MyRPG.Player
         public int dexterity = 5;
         public int cybernetics = 5;
         public int defense = 3;
-        public int[] tempStat = new int[4];
+        public int[] tempStat;
 
         public float maxHP = 100f;
         public float moveSpeed = 3f;
@@ -38,7 +38,6 @@ namespace MyRPG.Player
     public class PlayerParams : CharacterParams, IDamageable
     {
         #region Variables
-        public float attackTotal;
         #endregion
         public void StartHealing(float healRate = 5f)
         {
@@ -71,10 +70,10 @@ namespace MyRPG.Player
             OnLevelUp?.Invoke();
             OnStatsUpdate?.Invoke(this);
         }
-        protected float GetRandomAttack()
+        public float GetRandomAttack()
         {
-            attackTotal = Random.Range(data.attackMin, data.attackMax + 1);
-            return attackTotal;
+            int attackDamage = Random.Range(stat.attackMin, stat.attackMax + 1);
+            return attackDamage;
         }
         public void TakeDamage(float Damage, float CritChance = 0, float critMult = 2)
         {
@@ -118,7 +117,8 @@ namespace MyRPG.Player
         }
         private void UpdateStat()
         {
-            attackTotal = GetRandomAttack() + (stat.strength * 1.2f);
+            stat.attackMax = (int)(stat.attackMax + (stat.strength * 1.2f));
+            stat.attackMin = (int)(stat.attackMin + (stat.strength * 0.8f));
             stat.moveSpeed += stat.dexterity * 0.15f;
             stat.critChance += stat.dexterity * 0.35f;
             stat.maxHP += stat.defense * 0.5f;

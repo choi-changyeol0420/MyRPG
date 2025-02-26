@@ -546,6 +546,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: gun2
       objectReference: {fileID: 0}
+    - target: {fileID: 7184151139344471802, guid: 077a1121cc9c1904d973ac4535f0a80e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1073,6 +1077,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: machinegun2
       objectReference: {fileID: 0}
+    - target: {fileID: 6934488471804310867, guid: 35ecbc1c24e43b849acb30874bdf1708, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1343,6 +1351,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: machinegun1
       objectReference: {fileID: 0}
+    - target: {fileID: 5192209656185850549, guid: 131e578f3dacee34689cc4b6edeba63e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1490,6 +1502,10 @@ PrefabInstance:
     - target: {fileID: 8321811192713341334, guid: 43d3ad413b0312444ac82b6b95bb3ac4, type: 3}
       propertyPath: m_Name
       value: gun3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8321811192713341334, guid: 43d3ad413b0312444ac82b6b95bb3ac4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1773,6 +1789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: gun1
       objectReference: {fileID: 0}
+    - target: {fileID: 3654203704052391060, guid: c754307731fd745468b277e1ac49100b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8436745231190402099, guid: c754307731fd745468b277e1ac49100b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 397.59
@@ -1869,6 +1889,10 @@ PrefabInstance:
     - target: {fileID: 5212618667690318983, guid: dc84443d46fee124a845034640da2f08, type: 3}
       propertyPath: m_Name
       value: rocket3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5212618667690318983, guid: dc84443d46fee124a845034640da2f08, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3969,6 +3993,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: rocket2
       objectReference: {fileID: 0}
+    - target: {fileID: 4115146349120006340, guid: 2431592e68cba3842975a4224d32d419, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4861,6 +4889,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: machinegun3
       objectReference: {fileID: 0}
+    - target: {fileID: 7146650549969961415, guid: eadbd4d6abb853e42ad3fa0ac617a35a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4953,6 +4985,10 @@ PrefabInstance:
     - target: {fileID: 1752979117848021590, guid: f35ff870ef8afb34fba71fb8fab12520, type: 3}
       propertyPath: m_Name
       value: rocket1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1752979117848021590, guid: f35ff870ef8afb34fba71fb8fab12520, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2254027645549293955, guid: f35ff870ef8afb34fba71fb8fab12520, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10554,7 +10590,6 @@ MonoBehaviour:
   healthBar: {fileID: 1201784315}
   expImg: {fileID: 300371285}
   exptext: {fileID: 2017421105}
-  attackTotal: 0
 --- !u!4 &7425032207014018634
 Transform:
   m_ObjectHideFlags: 0

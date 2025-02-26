@@ -246,24 +246,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc23178c7345ffb4584654098aee599e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeDrone: {fileID: 0}
   followDistance: 3
   attackRange: 10
-  fireRate: 1
-  projectile: {fileID: 0}
-  bullet: {fileID: 0}
-  firePoints:
-  - {fileID: 7085805362499483947}
-  - {fileID: 3141341716463448668}
-  - {fileID: 6629363154397022948}
-  - {fileID: 2316860061214539769}
-  - {fileID: 6557739919220960664}
-  - {fileID: 760090104562524552}
-  missilePoint: []
-  missile: {fileID: 0}
-  missileFireRate: 2.5
-  machinegunPoint: []
-  machinegun: {fileID: 0}
-  machinegunFireRate: 2.5
+  droneStat:
+  - projectilePrefab: {fileID: 0}
+    projectile: {fileID: 0}
+    FireRate: 1
+    firePoint:
+    - {fileID: 760090104562524552}
+    - {fileID: 2316860061214539769}
+    - {fileID: 6557739919220960664}
+    - {fileID: 3141341716463448668}
+    - {fileID: 7085805362499483947}
+    - {fileID: 6629363154397022948}
 --- !u!1 &4797972993059621065
 GameObject:
   m_ObjectHideFlags: 0
