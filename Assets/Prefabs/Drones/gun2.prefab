@@ -1285,11 +1285,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc23178c7345ffb4584654098aee599e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradeDrone: {fileID: 0}
+  upgradeDrone: {fileID: 8321811192713341334, guid: 43d3ad413b0312444ac82b6b95bb3ac4, type: 3}
   followDistance: 3
   attackRange: 10
   droneStat:
-  - projectilePrefab: {fileID: 0}
+  - projectilePrefab: {fileID: 4968457720161144436, guid: 49011191e80ce8040aa7889bc49e16a8, type: 3}
     projectile: {fileID: 0}
     FireRate: 1
     firePoint:
@@ -1299,7 +1299,7 @@ MonoBehaviour:
     - {fileID: 4395723899861631351}
     - {fileID: 8980601261097307806}
     - {fileID: 136402143667175492}
-  - projectilePrefab: {fileID: 0}
+  - projectilePrefab: {fileID: 4968457720161144436, guid: 49011191e80ce8040aa7889bc49e16a8, type: 3}
     projectile: {fileID: 0}
     FireRate: 1
     firePoint:
@@ -1315,7 +1315,7 @@ MonoBehaviour:
     - {fileID: 6362377475734472309}
     - {fileID: 465225514870297777}
     - {fileID: 6394376254540667817}
-  - projectilePrefab: {fileID: 0}
+  - projectilePrefab: {fileID: 7344484948423236735, guid: 65787f01fc8ad2047b425c3466610fc5, type: 3}
     projectile: {fileID: 0}
     FireRate: 5
     firePoint:

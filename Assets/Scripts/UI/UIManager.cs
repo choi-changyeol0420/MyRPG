@@ -1,11 +1,19 @@
+using System.Collections.Generic;
 using MyRPG.Manager;
 using MyRPG.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using MyRPG.Drone;
 
 namespace MyRPG
 {
+    [System.Serializable]
+    public class DroneButton
+    {
+        public Button[] droneButton;
+        public bool isDrone;
+    }
     public class UIManager : MonoBehaviour
     {
         #region SingleTon
@@ -33,11 +41,16 @@ namespace MyRPG
         public GameObject statCanvas;
         public GameObject statButton;
         public Transform statgroup;
-
-        public GameObject img;
-
+        public GameObject statImg;
         private StatButtonUI[] buttonUI = new StatButtonUI[4];
         private GameObject[] statUI = new GameObject[4];
+        
+        public List<DroneButton> droneList;
+        public Button droneCanvasButton;
+        public GameObject droneCanvas;
+        public GameObject currentDrone;
+        public SelectDrone selectDrone;
+        public WarningPopup warningPopup;
         #endregion
         public void UpdatePlayerUI(CharacterParams character)
         {
@@ -55,6 +68,7 @@ namespace MyRPG
         public void AddOnClick(PlayerParams player)
         {
             statCanvasButton.onClick.AddListener(() => StatCanvasMenu());
+            droneCanvasButton.onClick.AddListener(() => droneCanvas.SetActive(!droneCanvas.activeSelf));
 
             for (int i = 0; i < statUI.Length; i++)
             {
@@ -67,12 +81,19 @@ namespace MyRPG
                 buttonUI[i].decreaseButton.onClick.RemoveAllListeners();
                 buttonUI[i].decreaseButton.onClick.AddListener(() => player.DecreaseStat((StatType)index));
             }
-                applyButton.onClick.AddListener(() => player.ApplyStats());
+            for(int i = 0; i < droneList.Count; i++)
+            {
+                for(int j = 0; j < droneList[i].droneButton.Length; j++)
+                {
+                    SelectDrone(i, j, player.GetComponent<PlayerFSM>());
+                }
+            }
+            applyButton.onClick.AddListener(() => player.ApplyStats());
         }
 
         public void UpdateUI(PlayerParams player)
         {
-            img.SetActive(player.stat.statPoints > 0); 
+            statImg .SetActive(player.stat.statPoints > 0); 
             pointText.text = player.stat.statPoints.ToString();
 
             statsText[0].text = "Str: " + player.stat.strength.ToString();
@@ -90,8 +111,94 @@ namespace MyRPG
         {
             statCanvas.SetActive(!statCanvas.activeSelf);
         }
+        public void SelectDrone(int index,int index2,PlayerFSM player)
+        {
+            PlayerParams playerParams = player.GetComponent<PlayerParams>();
+            switch(index)
+            {
+                case 0:
+                    switch(index2)
+                    {
+                        case 0:
+                            droneList[0].droneButton[0].onClick.AddListener(() => SelectDroneButton(0,player));
+                            droneList[0].isDrone = true;
+                            break;
+                        case 1:
+                            droneList[0].droneButton[1].onClick.AddListener(() => SelectDroneButton(1,player));
+                            droneList[0].isDrone = true;
+                            break;
+                        case 2:
+                            droneList[0].droneButton[2].onClick.AddListener(() => SelectDroneButton(2,player));
+                            droneList[0].isDrone = true;
+                            break;
+                    }
+                break;
+                case 1:
+                    if(playerParams.stat.level >= 10 && playerParams.stat.cybernetics >= 30 && droneList[0].isDrone)
+                    {
+                        switch(index2)
+                        {
+                            case 0:
+                                droneList[1].droneButton[0].onClick.AddListener(() => SelectDroneButton(3,player));
+                                droneList[1].isDrone = true;
+                                break;
+                            case 1:
+                                droneList[1].droneButton[1].onClick.AddListener(() => SelectDroneButton(4,player));
+                                droneList[1].isDrone = true;
+                                break;
+                            case 2:
+                                droneList[1].droneButton[2].onClick.AddListener(() => SelectDroneButton(5,player));
+                                droneList[1].isDrone = true;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        warningPopup.SetWarningText("레벨 10 이상과 Cyb 30 이상이 되어야 업그레이드 할 수 있습니다.");
+                    }
+                    break;
+                case 2:
+                    if(playerParams.stat.level >= 30 && playerParams.stat.cybernetics >= 80 && droneList[1].isDrone)
+                    {
+                        switch(index2)
+                        {
+                            case 0:
+                                droneList[2].droneButton[0].onClick.AddListener(() => SelectDroneButton(6,player));
+                                droneList[2].isDrone = true;
+                                break;
+                            case 1:
+                                droneList[2].droneButton[1].onClick.AddListener(() => SelectDroneButton(7,player));
+                                droneList[2].isDrone = true;
+                                    break;
+                            case 2:
+                                droneList[2].droneButton[2].onClick.AddListener(() => SelectDroneButton(8,player));
+                                droneList[2].isDrone = true;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        warningPopup.SetWarningText("레벨 30 이상과 Cyb 80 이상이 되어야 업그레이드 할 수 있습니다.");
+                    }
+                    break;
+            }
+        }
+        public void SelectDroneButton(int index,PlayerFSM player)
+        {
+            PlayerParams playerParams = player.GetComponent<PlayerParams>();
+            currentDrone.SetActive(true);
+            selectDrone.SelectDrones(index);
+            selectDrone.selectButton.onClick.AddListener(() => SelectDrones(player,selectDrone));
+        }
+        void SelectDrones(PlayerFSM player, SelectDrone drone)
+        {
+            Debug.Log(player.dronePrefab);
+            DroneFSM droneFSM = player.dronePrefab.GetComponent<DroneFSM>();
+            droneFSM.UpgradeDrone();
+            player.dronePrefab = null;
+            player.dronePrefab = drone.drone;
+        }
     }
-
     public enum StatType
     {
         STR,

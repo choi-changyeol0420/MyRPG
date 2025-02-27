@@ -156,12 +156,9 @@ namespace MyRPG.Drone
         }
         public void UpgradeDrone()
         {
-            if(upgradeDroneindex < 3 && upgradeDrone)
+            if(upgradeDroneindex < 3 && upgradeDrone != this.gameObject)
             {
                 upgradeDroneindex++;
-                GameObject Drone = Instantiate(upgradeDrone, transform.position, Quaternion.identity);
-                Drone.GetComponent<DroneFSM>().SetPlayer(player);
-                Destroy(gameObject);
             }
         }
     }
