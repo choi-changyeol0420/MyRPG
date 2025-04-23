@@ -137,8 +137,8 @@ MonoBehaviour:
   attackRange: 10
   droneStat:
   - projectilePrefab: {fileID: 7344484948423236735, guid: 65787f01fc8ad2047b425c3466610fc5, type: 3}
-    projectile: {fileID: 0}
-    FireRate: 6
+    projectileTag: Rocket
+    FireRate: 3
     firePoint:
     - {fileID: 4863969520358246764}
     - {fileID: 3839978707814710054}

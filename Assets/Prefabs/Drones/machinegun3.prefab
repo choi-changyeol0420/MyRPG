@@ -1110,8 +1110,8 @@ MonoBehaviour:
   attackRange: 10
   droneStat:
   - projectilePrefab: {fileID: 162640371958883404, guid: b628a696c7087124fbf9e624691f1181, type: 3}
-    projectile: {fileID: 0}
-    FireRate: 0.5
+    projectileTag: Machinegun
+    FireRate: 1
     firePoint:
     - {fileID: 8456485296863697920}
     - {fileID: 896056659449322649}
@@ -1138,8 +1138,8 @@ MonoBehaviour:
     - {fileID: 5617026060531781156}
     - {fileID: 7765130320926458192}
   - projectilePrefab: {fileID: 162640371958883404, guid: b628a696c7087124fbf9e624691f1181, type: 3}
-    projectile: {fileID: 0}
-    FireRate: 1
+    projectileTag: Machinegun
+    FireRate: 3
     firePoint:
     - {fileID: 5814334662816417311}
     - {fileID: 2791067043067768646}
@@ -1153,9 +1153,9 @@ MonoBehaviour:
     - {fileID: 6859728034201793200}
     - {fileID: 4306070597443301086}
     - {fileID: 7786938670972250740}
-  - projectilePrefab: {fileID: 4968457720161144436, guid: 49011191e80ce8040aa7889bc49e16a8, type: 3}
-    projectile: {fileID: 0}
-    FireRate: 4
+  - projectilePrefab: {fileID: 4968457720161144436, guid: 9755aa1859db5e747a13f6fb4a5781b8, type: 3}
+    projectileTag: ShotGun
+    FireRate: 5
     firePoint:
     - {fileID: 5053986668051890850}
     - {fileID: 1505051241268763149}

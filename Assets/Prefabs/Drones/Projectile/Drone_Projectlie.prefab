@@ -72,6 +72,7 @@ MonoBehaviour:
   speed: 10
   lifeTime: 5
   damage: 0
+  poolTag: Drone
 --- !u!1 &8301401242440139320
 GameObject:
   m_ObjectHideFlags: 0

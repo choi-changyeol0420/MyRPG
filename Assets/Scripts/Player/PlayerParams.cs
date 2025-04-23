@@ -64,7 +64,7 @@ namespace MyRPG.Player
         {
             stat.exp -= stat.expToNextLevel;
             stat.level++;
-            stat.expToNextLevel = Mathf.RoundToInt(stat.expToNextLevel * 1.2f);
+            stat.expToNextLevel =  
 
             stat.statPoints += 5;
             OnLevelUp?.Invoke();

@@ -159,10 +159,11 @@ MonoBehaviour:
   followDistance: 3
   attackRange: 10
   droneStat:
-  - projectilePrefab: {fileID: 0}
-    projectile: {fileID: 0}
-    FireRate: 0
-    firePoint: []
+  - projectilePrefab: {fileID: 1118378434304843002, guid: 64686b8f3ac56684b8c0913b67b6f46a, type: 3}
+    projectileTag: Drone
+    FireRate: 1
+    firePoint:
+    - {fileID: 244170097907128213}
 --- !u!1 &5699947030721920154
 GameObject:
   m_ObjectHideFlags: 0

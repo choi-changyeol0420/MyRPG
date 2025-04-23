@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 namespace MyRPG.Drone
 {
     [System.Serializable]
@@ -13,7 +12,7 @@ namespace MyRPG.Drone
     {
         #region Variables
         public GameObject projectilePrefab;
-        [HideInInspector] public GameObject projectile;
+        public string projectileTag;
         public float FireRate;
         public Transform[] firePoint;
         #endregion
@@ -39,6 +38,8 @@ namespace MyRPG.Drone
         }
         private void Update()
         {
+            if(player == null) return;
+            
             if(player.gameObject.GetComponent<PlayerParams>().stat.isDie)
             {
                 Destroy(gameObject);
@@ -53,14 +54,21 @@ namespace MyRPG.Drone
         }
         void FindTarget()
         {
+            if(targetEnemy != null)
+            {
+                float distance = Vector3.Distance(transform.position, targetEnemy.position);
+                if(distance > attackRange)
+                {
+                    targetEnemy = null;
+                }
+            }
+
             if(targetEnemy == null)
             {
                 GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
                 float closeDistance = attackRange;
-                targetEnemy = null;
                 foreach (GameObject enemy in enemies)
                 {
-                    EnemyParams enemyParams = enemy.GetComponent<EnemyParams>();
                     float distance = Vector3.Distance(transform.position, enemy.transform.position);
                     if (distance < closeDistance)
                     {
@@ -69,6 +77,7 @@ namespace MyRPG.Drone
                     }
                 }
             }
+            
             if (targetEnemy && !isAttacking)
             {
                 RotateToMoveDirection();
@@ -77,12 +86,9 @@ namespace MyRPG.Drone
         }
         void DroneAttack()
         {
+            if(isAttacking) return;
             isAttacking = true;
-            while(targetEnemy)
-            {
-                StartCoroutine(FireProjectile());
-            }
-            isAttacking = false;
+            StartCoroutine(FireProjectile());
         }
         void MoveToTarget()
         {
@@ -133,17 +139,34 @@ namespace MyRPG.Drone
         }
         protected virtual IEnumerator FireProjectile()
         {
-            foreach (DroneStats drone in droneStat)
+            while(targetEnemy != null)
             {
-                if(drone.projectile && targetEnemy)
+                foreach (DroneStats drone in droneStat)
                 {
-                    foreach (Transform firePoint in drone.firePoint)
+                    if(drone.projectilePrefab && targetEnemy)
                     {
-                        GameObject bullet = Instantiate(drone.projectile, firePoint.position, firePoint.rotation);
-                        yield return new WaitForSeconds(drone.FireRate);
+                        foreach (Transform firePoint in drone.firePoint)
+                        {
+                            if (ObjectPool.Instance != null)
+                            {
+                                GameObject bullet = ObjectPool.Instance.SpawnFromPool(
+                                    drone.projectileTag,
+                                    firePoint.position,
+                                    firePoint.rotation
+                                );
+
+                                if (bullet == null)
+                                {
+                                    Debug.LogWarning($"Failed to spawn projectile with tag {drone.projectileTag}");
+                                }
+                            }
+                            yield return new WaitForSeconds(drone.FireRate);
+                        }
                     }
                 }
+                yield return null;
             }
+            isAttacking = false;
         }
         void RotateToMoveDirection()
         {
